@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
             style: Theme.of(context).textTheme.headline1,
           ),
         ),
-        // overlayBuilderMap: {
+        // overlayBuilderMap: { // todo Overlay en fonction du jeux
         //   'menu': (_, game) => Menu(game),
         //   'gameover': (_, game) => GameOver(game),
         // },
@@ -83,6 +83,15 @@ class MyApp extends StatelessWidget {
 class MySnakeGame extends FlameGame with HasCollisionDetection {
   MySnakeGame({Key? key}) : super();
   //ici on va gerer la logique du jeux (score etc)
+
+  //TODO gerer le fait que c'est une map avec des carrés et pas continues (ou pas forcement ? ou un peu ? )
+  
+  //TODO add le foodManager qui gerera de placer de la bouffe (et de la peindre) et de lui filer une hitbox 
+  //TODO add le gentil snake qui est controllé par (gesture et keybord ?) et qui grossie quand il bouffe
+  //TODO add le mechant snake qui veut manger la pomme (peut etre qu'il a des niveaux de difficulter le gus je sais pas)
+  //TODO gerer le gameOver
+  //TODO gerer le winingCondition (on en mets un ? hehe :eyes:, quand le serpent arrive à une certaine taille -> on grossi la map et le serpent mechant et c'est repartie etc etc)
+
 
   @override
   Future<void>? onLoad() {
@@ -176,7 +185,8 @@ class ExampleSnake extends CircleComponent
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    print(other.toString());
+    //test qui j'ai touché et fait appel une methode du jeux en fonction 
+    // via gameRef.${ma methode}
     super.onCollision(intersectionPoints, other);
   }
   
