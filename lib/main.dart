@@ -1,115 +1,183 @@
-import 'package:flutter/material.dart';
+import 'package:flame/collisions.dart';
+import 'package:flame/components.dart';
+import 'package:flame/game.dart';
+import 'package:flutter/material.dart' hide Image, Gradient;
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    final theme = ThemeData(
+      textTheme: TextTheme(
+        headline1: GoogleFonts.vt323(
+          fontSize: 35,
+          color: Colors.white,
+        ),
+        button: GoogleFonts.vt323(
+          fontSize: 30,
+          fontWeight: FontWeight.w500,
+        ),
+        bodyText1: GoogleFonts.vt323(
+          fontSize: 28,
+          color: Colors.grey,
+        ),
+        bodyText2: GoogleFonts.vt323(
+          fontSize: 18,
+          color: Colors.grey,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.black,
+          minimumSize: const Size(150, 50),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        hoverColor: Colors.red.shade700,
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
+        errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.red.shade700,
+          ),
+        ),
+      ),
+    );
+
+    return MaterialApp(
+      title: 'PadRacing',
+      home: GameWidget<MySnakeGame>(
+        backgroundBuilder: (context) => Container(
+          color: Colors.pink,
+        ),
+        game: MySnakeGame(),
+        loadingBuilder: (context) => Center(
+          child: Text(
+            'Loading...',
+            style: Theme.of(context).textTheme.headline1,
+          ),
+        ),
+        // overlayBuilderMap: {
+        //   'menu': (_, game) => Menu(game),
+        //   'gameover': (_, game) => GameOver(game),
+        // },
+        // initialActiveOverlays: const ['menu'],
+      ),
+      theme: theme,
     );
   }
+}
+
+class MySnakeGame extends FlameGame with HasCollisionDetection {
+  MySnakeGame({Key? key}) : super();
+  //ici on va gerer la logique du jeux (score etc)
+
+  @override
+  Future<void>? onLoad() {
+    // TODO: implement onLoad
+
+    //ici on va ajouter les composentes de notre jeux
+    // add(PlayerSnake());
+    // add(EnemieSnake());
+    // add(FoodsManager());
+    // add(
+    //   // RectangleHitbox(
+    //   //   anchor: Anchor.center,
+    //   //   position: Vector2(130,140),
+    //   //   size: Vector2(20, 20),
+    //   // ),
+    // );
+    add(ExampleSnake(20));
+    return super.onLoad();
+  }
+}
+
+enum SnakeDirection {
+  Right,
+  Left,
+  Up,
+  Down,
+}
+
+class ExampleSnake extends CircleComponent
+    with HasGameRef<MySnakeGame>, CollisionCallbacks {
+  ExampleSnake(double radius)
+      : _paint = Paint()..color = Colors.blue,
+        direction = SnakeDirection.Right,
+        super(
+          anchor: Anchor.center,
+          radius: radius,
+          position: Vector2.all(20),
+        );
+
+  Paint _paint;
+  SnakeDirection direction;
+
+  @override
+  Future<void>? onLoad() {
+    add(CircleHitbox.relative(1.0,
+        parentSize: Vector2.all(2 * radius), anchor: Anchor.center));
+    return super.onLoad();
+  }
+
+  void swapeDirection(){
+    switch (direction) {
+      case SnakeDirection.Right:
+      direction = SnakeDirection.Left;
+        break;
+      case SnakeDirection.Left:
+      direction = SnakeDirection.Right;
+        break;
+
+        
+      default:
+    }
+  }
+
+  @override
+  void update(double dt) {
+    //check for out of the screen
+    final topLeft = absoluteTopLeftPosition;
+    final gameSize = gameRef.size;
+    if(topLeft.x > gameSize.x || topLeft.y > gameSize.y) {
+      swapeDirection();
+
+    }
+    final bottomRight = absolutePositionOfAnchor(Anchor.bottomRight);
+    if(bottomRight.x < 0 || bottomRight.y < 0) {
+      swapeDirection();
+
+    }
+    switch (direction) {
+      case SnakeDirection.Right:
+        position.add(Vector2(1, 1));
+
+        break;
+      case SnakeDirection.Left:
+        position.add(Vector2(-1, -1));
+
+        break;
+      default:
+    }
+    super.update(dt);
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    print(other.toString());
+    super.onCollision(intersectionPoints, other);
+  }
+  
 }
