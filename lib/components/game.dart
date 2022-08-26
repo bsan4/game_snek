@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:snake_snake/components/snake.dart';
 import 'package:snake_snake/components/player_snake.dart';
+import 'package:snake_snake/components/enemy_snake.dart';
 
 import 'food_manager.dart';
 
@@ -18,6 +19,7 @@ class MySnakeGame extends FlameGame
   MySnakeGame({Key? key}) : super();
 
   late PlayerSnake mySnake;
+  late EnemySnake enemySnake;
   late FoodManager foodManager;
   //ici on va gerer la logique du jeux (score etc)
 
@@ -99,6 +101,7 @@ class MySnakeGame extends FlameGame
     add(FoodManager(30, foodSprite));
 
     mySnake = PlayerSnake(15);
+    enemySnake = EnemySnake(10);
     // // add(
     // //   // RectangleHitbox(
     // //   //   anchor: Anchor.center,
@@ -107,6 +110,7 @@ class MySnakeGame extends FlameGame
     // //   // ),
     // // );
     add(mySnake);
+    add(enemySnake);
     return super.onLoad();
   }
 }
