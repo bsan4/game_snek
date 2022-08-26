@@ -75,6 +75,7 @@ class MyApp extends StatelessWidget {
           style: Theme.of(context).textTheme.headline1,
         ),
       ),
+
       // overlayBuilderMap: { // todo Overlay en fonction du jeux
       //   'menu': (_, game) => Menu(game),
       //   'gameover': (_, game) => GameOver(game),
@@ -325,6 +326,9 @@ class FoodManager extends SpriteComponent
   @override
   void render(Canvas canvas) {
     // TODO: implement render
+    Paint rectPain = Paint();
+    rectPain.color = Colors.grey.withOpacity(0.6);
+    canvas.drawRect(position.toRect(), rectPain);
     super.render(canvas);
   }
 
