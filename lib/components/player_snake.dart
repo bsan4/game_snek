@@ -17,13 +17,13 @@ import 'snake_body.dart';
 class PlayerSnakeHead extends ExampleSnake {
   PlayerSnakeHead(double radius) : super(radius);
 
-  // List<SnakeBody> bodyTile = []; 
-  
+  // List<SnakeBody> bodyTile = [];
+
   @override
   Future<void>? onLoad() {
     // bodyTile.add(SnakeBody(15));
     // bodyTile.add(SnakeBody(10,));
-    
+
     return super.onLoad();
   }
 
@@ -37,37 +37,31 @@ class PlayerSnakeHead extends ExampleSnake {
 
   @override
   void render(Canvas canvas) {
-  //  for(SnakeBody body in bodyTile){
-  //   //  print(body.position);
-  //    body.render(canvas);
-  //  }
+    //  for(SnakeBody body in bodyTile){
+    //   //  print(body.position);
+    //    body.render(canvas);
+    //  }
     super.render(canvas);
   }
 
-  
-
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-   if(other is FoodManager){
-    //  bodyTile.add();
-   }
+    if (other is FoodManager) {
+      //  bodyTile.add();
+    }
     super.onCollision(intersectionPoints, other);
   }
-
-
 }
-
 
 class PlayerSnakeBody extends ExampleSnake {
   PlayerSnakeBody(double radius) : super(radius);
 
-  // List<SnakeBody> bodyTile = []; 
-  
+  // List<SnakeBody> bodyTile = [];
+
   @override
   Future<void>? onLoad() {
     // bodyTile.add(SnakeBody(15));
     // bodyTile.add(SnakeBody(10,));
-    
     return super.onLoad();
   }
 
@@ -81,30 +75,24 @@ class PlayerSnakeBody extends ExampleSnake {
 
   @override
   void render(Canvas canvas) {
-  //  for(SnakeBody body in bodyTile){
-  //   //  print(body.position);
-  //    body.render(canvas);
-  //  }
+    //  for(SnakeBody body in bodyTile){
+    //   //  print(body.position);
+    //    body.render(canvas);
+    //  }
     super.render(canvas);
   }
 
-  
-
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-   if(other is FoodManager){
-    //  bodyTile.add();
-   }
+    if (other is FoodManager) {
+      //  bodyTile.add();
+    }
     super.onCollision(intersectionPoints, other);
   }
-
-
 }
 
-
-class PlayerSnakeManager extends PositionComponent{
-  
-  List<PlayerSnakeBody> bodys =[];
+class PlayerSnakeManager extends PositionComponent {
+  List<PlayerSnakeBody> bodys = [];
   PlayerSnakeHead head = PlayerSnakeHead(30);
 
   @override
@@ -122,6 +110,15 @@ class PlayerSnakeManager extends PositionComponent{
     super.update(dt);
   }
 
-
-  
+  /// Returns all the objects that could cause a collision
+  /// This is necessary because they are not registered in the GameRef, only
+  /// the manager is.
+  List<PositionComponent> getCollisionableObjects() {
+    List<PositionComponent> objList = [];
+    for (PositionComponent bodyObject in bodys) {
+      objList.add(bodyObject);
+    }
+    objList.add(head);
+    return objList;
+  }
 }

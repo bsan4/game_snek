@@ -45,13 +45,13 @@ class MySnakeGame extends FlameGame
       mySnake.head.setDirection(SnakeDirection.Left);
     }
     if (info.delta.game.x > _gestureThreshold) {
-       mySnake.head.setDirection(SnakeDirection.Right);
+      mySnake.head.setDirection(SnakeDirection.Right);
     }
     if (info.delta.game.y < -_gestureThreshold) {
-       mySnake.head.setDirection(SnakeDirection.Up);
+      mySnake.head.setDirection(SnakeDirection.Up);
     }
     if (info.delta.game.y > _gestureThreshold) {
-       mySnake.head.setDirection(SnakeDirection.Down);
+      mySnake.head.setDirection(SnakeDirection.Down);
     }
     super.onPanUpdate(info);
   }
@@ -62,16 +62,16 @@ class MySnakeGame extends FlameGame
     keysPressed,
   ) {
     if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
-       mySnake.head.setDirection(SnakeDirection.Left);
+      mySnake.head.setDirection(SnakeDirection.Left);
     }
     if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
-       mySnake.head.setDirection(SnakeDirection.Right);
+      mySnake.head.setDirection(SnakeDirection.Right);
     }
     if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-       mySnake.head.setDirection(SnakeDirection.Up);
+      mySnake.head.setDirection(SnakeDirection.Up);
     }
     if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
-       mySnake.head.setDirection(SnakeDirection.Down);
+      mySnake.head.setDirection(SnakeDirection.Down);
     }
     return KeyEventResult.ignored;
   }
