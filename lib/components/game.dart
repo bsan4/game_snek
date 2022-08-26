@@ -18,7 +18,7 @@ class MySnakeGame extends FlameGame
     with HasCollisionDetection, PanDetector, KeyboardEvents {
   MySnakeGame({Key? key}) : super();
 
-  late PlayerSnake mySnake;
+  late PlayerSnakeManager mySnake;
   late EnemySnake enemySnake;
   late FoodManager foodManager;
   //ici on va gerer la logique du jeux (score etc)
@@ -42,16 +42,16 @@ class MySnakeGame extends FlameGame
   @override
   void onPanUpdate(DragUpdateInfo info) {
     if (info.delta.game.x < -_gestureThreshold) {
-      mySnake.setDirection(SnakeDirection.Left);
+      mySnake.head.setDirection(SnakeDirection.Left);
     }
     if (info.delta.game.x > _gestureThreshold) {
-      mySnake.setDirection(SnakeDirection.Right);
+       mySnake.head.setDirection(SnakeDirection.Right);
     }
     if (info.delta.game.y < -_gestureThreshold) {
-      mySnake.setDirection(SnakeDirection.Up);
+       mySnake.head.setDirection(SnakeDirection.Up);
     }
     if (info.delta.game.y > _gestureThreshold) {
-      mySnake.setDirection(SnakeDirection.Down);
+       mySnake.head.setDirection(SnakeDirection.Down);
     }
     super.onPanUpdate(info);
   }
@@ -62,16 +62,16 @@ class MySnakeGame extends FlameGame
     keysPressed,
   ) {
     if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
-      mySnake.setDirection(SnakeDirection.Left);
+       mySnake.head.setDirection(SnakeDirection.Left);
     }
     if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
-      mySnake.setDirection(SnakeDirection.Right);
+       mySnake.head.setDirection(SnakeDirection.Right);
     }
     if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-      mySnake.setDirection(SnakeDirection.Up);
+       mySnake.head.setDirection(SnakeDirection.Up);
     }
     if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
-      mySnake.setDirection(SnakeDirection.Down);
+       mySnake.head.setDirection(SnakeDirection.Down);
     }
     return KeyEventResult.ignored;
   }
@@ -105,7 +105,7 @@ class MySnakeGame extends FlameGame
     foodManager = FoodManager(30, foodSprite);
     add(foodManager);
 
-    mySnake = PlayerSnake(15);
+    mySnake = PlayerSnakeManager();
     enemySnake = EnemySnake(10);
     // // add(
     // //   // RectangleHitbox(
