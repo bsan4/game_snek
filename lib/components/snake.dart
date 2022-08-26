@@ -77,7 +77,7 @@ class ExampleSnake extends CircleComponent
   }
 
   Vector2 getNextPosition(localDirection) {
-    Vector2 nextPosition = position;
+    Vector2 nextPosition = Vector2(position.x, position.y);
     switch (localDirection) {
       case SnakeDirection.Right:
         nextPosition.add(Vector2(1, 0) * velocity);
