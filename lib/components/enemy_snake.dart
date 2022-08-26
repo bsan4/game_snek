@@ -24,17 +24,20 @@ class EnemySnake extends ExampleSnake {
   @override
   void update(double dt) {
     /// Calculate the new direction, which is towards the food
+    SnakeDirection newDirection = direction;
     Vector2 foodCoordinates = _getFoodCoordinates();
-    if (position.x > foodCoordinates.x) {
-      setDirection(SnakeDirection.Left);
-    } else {
-      setDirection(SnakeDirection.Right);
+    if (position.x > foodCoordinates.x + 1) {
+      newDirection = SnakeDirection.Left;
+    } else if (position.x + 1 < foodCoordinates.x) {
+      newDirection = SnakeDirection.Right;
+    } else if (position.y > foodCoordinates.y + 1) {
+      newDirection = SnakeDirection.Up;
+    } else if (position.y + 1 < foodCoordinates.y) {
+      newDirection = SnakeDirection.Down;
     }
 
-    if (position.y > foodCoordinates.y) {
-      setDirection(SnakeDirection.Up);
-    } else {
-      setDirection(SnakeDirection.Down);
+    if (newDirection != direction) {
+      setDirection(newDirection);
     }
 
     ///Propagate the method
@@ -42,8 +45,6 @@ class EnemySnake extends ExampleSnake {
   }
 
   Vector2 _getFoodCoordinates() {
-    print(
-        "[SENEMY SNAKE] @_getFoodCoordinates - position de la bouffe :  ${gameRef.foodManager.position}\n");
     return gameRef.foodManager.position;
   }
 }
