@@ -96,9 +96,14 @@ class MySnakeGame extends FlameGame
     // add(BackgroundLayer(sizeEcran))
     // add(PlayerSnake());
     // add(EnemieSnake());
-    await images.loadAll(['Ghostpixxells_pixelfood/97_sushi.png']);
+    await images.loadAll([
+      'Ghostpixxells_pixelfood/97_sushi.png',
+      'Ghostpixxells_pixelfood/99_taco.png',
+      'Ghostpixxells_pixelfood/101_waffle.png',
+    ]);
     var foodSprite = await Sprite.load('Ghostpixxells_pixelfood/97_sushi.png');
-    add(FoodManager(30, foodSprite));
+    foodManager = FoodManager(30, foodSprite);
+    add(foodManager);
 
     mySnake = PlayerSnake(15);
     enemySnake = EnemySnake(10);

@@ -17,29 +17,36 @@ enum FoodType {
   waffle,
 }
 
-// class FoodManager extends SpriteGroupComponent<FoodType>
-class FoodManager extends SpriteComponent
+class FoodManager extends SpriteGroupComponent<FoodType>
+// class FoodManager extends SpriteComponent
     with HasGameRef<MySnakeGame>, CollisionCallbacks {
   FoodManager(this.tileSize, this.localSprite);
   // FoodManager(double tileSize, Sprite sprite) : super(sprite: sprite, anchor: Anchor.center, size: Vector2.all(tileSize), position: Vector2(200,200));
   double tileSize;
   Sprite localSprite;
 
+  late Sprite sushiSprite ;
+  late Sprite tacoSprite ;
+  late Sprite waffleSprite ;
+
   @override
   Future<void>? onLoad() async {
-    // final sushiSprite = await gameRef.loadSprite('Ghostpixxells_pixelfood/97_sushi.png');
-    // final tacoSprite = await gameRef.loadSprite('Ghostpixxells_pixelfood/99_taco.png');
-    // final waffleSprite = await gameRef.loadSprite('Ghostpixxells_pixelfood/101_waffle.png');
-    // sprites ={
-    //   FoodType.sushi : sushiSprite,
-    //   FoodType.taco : tacoSprite,
-    //   FoodType.waffle : waffleSprite,
-    // } ;
+
+    sushiSprite = await gameRef.loadSprite('Ghostpixxells_pixelfood/97_sushi.png');
+    tacoSprite = await gameRef.loadSprite('Ghostpixxells_pixelfood/99_taco.png');
+    waffleSprite = await gameRef.loadSprite('Ghostpixxells_pixelfood/101_waffle.png');
+
+    sprites ={
+      FoodType.sushi : sushiSprite,
+      FoodType.taco : tacoSprite,
+      FoodType.waffle : waffleSprite,
+    } ;
+    current = FoodType.sushi;
     position = Vector2.all(300);
     print(position);
     size = Vector2.all(tileSize);
     anchor = Anchor.center;
-    sprite = localSprite;
+    // sprite = localSprite;
     RectangleHitbox hitBox = RectangleHitbox();
     add(hitBox);
 
@@ -77,6 +84,8 @@ class FoodManager extends SpriteComponent
         Random().nextDouble() * screenSize.y);
 
     position = randomPosition;
+
+    current = FoodType.values[Random().nextInt(FoodType.values.length)];
     //add a point to gameref (that will eventualy tell the snake he's growing)
   }
 

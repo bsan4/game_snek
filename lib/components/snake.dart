@@ -20,7 +20,7 @@ class ExampleSnake extends CircleComponent
           radius: radius,
           position: Vector2.all(200),
         );
-
+  double velocity = 2.0;
   SnakeDirection direction;
 
   @override
@@ -66,19 +66,19 @@ class ExampleSnake extends CircleComponent
     }
     switch (direction) {
       case SnakeDirection.Right:
-        position.add(Vector2(1, 0));
+        position.add(Vector2(1, 0) * velocity);
 
         break;
       case SnakeDirection.Left:
-        position.add(Vector2(-1, 0));
+        position.add(Vector2(-1, 0) * velocity);
 
         break;
       case SnakeDirection.Up:
-        position.add(Vector2(0, -1));
+        position.add(Vector2(0, -1) * velocity);
 
         break;
       case SnakeDirection.Down:
-        position.add(Vector2(0, 1));
+        position.add(Vector2(0, 1) * velocity);
 
         break;
       default:
