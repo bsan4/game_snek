@@ -22,6 +22,7 @@ class EnemySnake extends ExampleSnake {
   @override
   void update(double dt)
   {
+    Vector2 foodCoordinates = _getFoodCoordinates();
     super.update(dt);
   }
 
