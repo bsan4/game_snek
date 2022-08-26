@@ -17,8 +17,9 @@ import 'game.dart';
 /// by a thousand years old daemon's damned soul. Watch out : it will
 /// try to eat your food and there is nothing you can do about it.
 class EnemySnake extends ExampleSnake {
-  EnemySnake(double radius) : super(radius) {
-    ;
+  double circleRadius = 10.0;
+  EnemySnake(double localRadius) : super(localRadius) {
+    circleRadius = localRadius;
   }
 
   @override
@@ -26,14 +27,29 @@ class EnemySnake extends ExampleSnake {
     /// Calculate the new direction, which is towards the food
     SnakeDirection newDirection = direction;
     Vector2 foodCoordinates = _getFoodCoordinates();
-    if (position.x > foodCoordinates.x + 1) {
+    // The current position is compared to the target + 1 for hysteresis
+    if (position.x > foodCoordinates.x + circleRadius) {
       newDirection = SnakeDirection.Left;
-    } else if (position.x + 1 < foodCoordinates.x) {
+    } else if (position.x + circleRadius < foodCoordinates.x) {
       newDirection = SnakeDirection.Right;
-    } else if (position.y > foodCoordinates.y + 1) {
+    } else if (position.y > foodCoordinates.y + circleRadius) {
       newDirection = SnakeDirection.Up;
-    } else if (position.y + 1 < foodCoordinates.y) {
+    } else if (position.y + circleRadius < foodCoordinates.y) {
       newDirection = SnakeDirection.Down;
+    }
+
+    /// Avoid a deadly object, such as a wall or a player. Food is fine.
+    ComponentSet objectsOnMap = gameRef.children;
+    for (Component object in objectsOnMap) {
+      if (object is PositionComponent) {
+        if ((object is! FoodManager) && !identical(object, this)) {
+          Vector2 nextPosition = getNextPosition(newDirection);
+          double collisionDistance = nextPosition.distanceTo(object.position);
+          if (collisionDistance < circleRadius) {
+            print("Going to collide : ${collisionDistance}");
+          }
+        }
+      }
     }
 
     if (newDirection != direction) {

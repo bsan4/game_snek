@@ -64,25 +64,7 @@ class ExampleSnake extends CircleComponent
     if (bottomRight.y > gameSize.y) {
       setDirection(SnakeDirection.Up);
     }
-    switch (direction) {
-      case SnakeDirection.Right:
-        position.add(Vector2(1, 0) * velocity);
-
-        break;
-      case SnakeDirection.Left:
-        position.add(Vector2(-1, 0) * velocity);
-
-        break;
-      case SnakeDirection.Up:
-        position.add(Vector2(0, -1) * velocity);
-
-        break;
-      case SnakeDirection.Down:
-        position.add(Vector2(0, 1) * velocity);
-
-        break;
-      default:
-    }
+    position = getNextPosition(direction);
     super.update(dt);
   }
 
@@ -92,5 +74,25 @@ class ExampleSnake extends CircleComponent
     //test qui j'ai touché et fait appel une methode du jeux en fonction
     // via gameRef.${ma methode}
     super.onCollision(intersectionPoints, other);
+  }
+
+  Vector2 getNextPosition(localDirection) {
+    Vector2 nextPosition = position;
+    switch (localDirection) {
+      case SnakeDirection.Right:
+        nextPosition.add(Vector2(1, 0) * velocity);
+        break;
+      case SnakeDirection.Left:
+        nextPosition.add(Vector2(-1, 0) * velocity);
+        break;
+      case SnakeDirection.Up:
+        nextPosition.add(Vector2(0, -1) * velocity);
+        break;
+      case SnakeDirection.Down:
+        nextPosition.add(Vector2(0, 1) * velocity);
+        break;
+      default:
+    }
+    return nextPosition;
   }
 }
