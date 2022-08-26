@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:flame/collisions.dart';
@@ -13,7 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'components/game.dart';
 
 void main() {
- WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     const MyApp(),
   );
@@ -92,12 +91,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
 
 class SquareBackground extends StatelessWidget {
   var FIXEDTILESIZE = 30.0;

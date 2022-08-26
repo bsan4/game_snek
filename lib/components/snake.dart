@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 
 import 'game.dart';
 
-
 enum SnakeDirection {
   Right,
   Left,
@@ -13,7 +12,7 @@ enum SnakeDirection {
 }
 
 class ExampleSnake extends CircleComponent
-    with HasGameRef<MySnakeGame>, CollisionCallbacks{
+    with HasGameRef<MySnakeGame>, CollisionCallbacks {
   ExampleSnake(double radius)
       : direction = SnakeDirection.Right,
         super(
@@ -26,8 +25,7 @@ class ExampleSnake extends CircleComponent
 
   @override
   Future<void>? onLoad() {
-    add(CircleHitbox.relative(1.0,
-        parentSize: Vector2.all(2 * radius), anchor: Anchor.center));
+    add(CircleHitbox());
     return super.onLoad();
   }
 
@@ -56,14 +54,14 @@ class ExampleSnake extends CircleComponent
     if (topLeft.x < 0) {
       setDirection(SnakeDirection.Right);
     }
-    if(topLeft.y < 0){
+    if (topLeft.y < 0) {
       setDirection(SnakeDirection.Down);
     }
     final bottomRight = absolutePositionOfAnchor(Anchor.bottomRight);
-    if (bottomRight.x > gameSize.x ) {
+    if (bottomRight.x > gameSize.x) {
       setDirection(SnakeDirection.Left);
     }
-    if (bottomRight.y > gameSize.y ) {
+    if (bottomRight.y > gameSize.y) {
       setDirection(SnakeDirection.Up);
     }
     switch (direction) {

@@ -40,9 +40,8 @@ class FoodManager extends SpriteComponent
     size = Vector2.all(tileSize);
     anchor = Anchor.center;
     sprite = localSprite;
-    add(
-RectangleHitbox.relative(Vector2.all(0.8), parentSize: size)
-    );
+    RectangleHitbox hitBox = RectangleHitbox();
+    add(hitBox);
 
     return super.onLoad();
   }
