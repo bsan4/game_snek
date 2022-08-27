@@ -104,6 +104,7 @@ class MySnakeGame extends FlameGame
 
   @override
   Future<void>? onLoad() async {
+    paused = true;
     // TODO: implement onLoad
 
     //ici on va ajouter les composentes de notre jeux
@@ -134,15 +135,17 @@ class MySnakeGame extends FlameGame
     return super.onLoad();
   }
 
-  void gameOver() {
+  void gameOver(String reasonForDeath) {
     //to do reset all component and score
 
     gameState = GameState.gameOver;
+    buildContext?.read<ScoreProvider>().setReasonForDeath(reasonForDeath);
     overlays.add(GameOver.overlayName);
   }
 
   void startGame() {
     //to do reset all component and score
+    paused = false;
 
     gameState = GameState.running;
     overlays.remove(StartUpMenu.overlayName);
@@ -165,7 +168,7 @@ class MySnakeGame extends FlameGame
 
   void onEnemyAssasination() {}
 
-  void onPlayerSuicide() {}
+  void onPlayerSuicide() {gameOver("Suicide");}
 
-  void onPlayerAssasination() {}
+  void onPlayerAssasination() {gameOver("Assassinated by the enemy");}
 }

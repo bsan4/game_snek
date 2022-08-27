@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/collisions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/services.dart';
 
 import 'package:snake_snake/components/food_manager.dart';
 
@@ -13,6 +14,21 @@ enum SnakeDirection {
   Left,
   Up,
   Down,
+}
+
+class SnakeBodyPart extends SpriteComponent {
+  SnakeBodyPart(bool isEvil, double circleRadius, Vector2 initialPosition, Sprite sprite)
+  : super(sprite: sprite,
+        size: Vector2.all(2 * circleRadius),
+        anchor: Anchor.center,
+        position: Vector2(initialPosition.x, initialPosition.y));
+
+  @override
+  Future<void>? onLoad() async {        
+    add(CircleHitbox());
+    return super.onLoad();
+  }
+  
 }
 
 class ExampleSnake extends SpriteComponent
@@ -181,17 +197,14 @@ class ExampleSnake extends SpriteComponent
   }
 
   void _addBodyPart() async {
-    /// add a nex component
-    ///
-    ///
-    String pathToSprite =
-        isEvil ? 'snakes/17.png' : 'snakes/14.png';
+    /// add a new component
+    Vector2 positionOfLastBodyPart = position.clone();
+    if(bodyParts.length > 0){
+      positionOfLastBodyPart = bodyParts.last.position.clone();
+    }
+    String pathToSprite = isEvil ? 'snakes/17.png' : 'snakes/14.png';
     final sprite = await Sprite.load(pathToSprite);
-    SpriteComponent newCircle = SpriteComponent(
-        sprite: sprite,
-        size: Vector2.all(2 * circleRadius),
-        anchor: Anchor.center,
-        position: Vector2(position.x, position.y));
+    SnakeBodyPart newCircle = SnakeBodyPart(isEvil, circleRadius, positionOfLastBodyPart.clone(), sprite);
     bodyParts.add(newCircle);
 
     /// resize all elements to increasingly small diameters

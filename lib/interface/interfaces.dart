@@ -38,7 +38,13 @@ class GameOver extends StatelessWidget {
               children: [
                 Expanded(
                     child: Text(
-                  'GameOver',
+                  'Game Over',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline1,
+                )),
+                Expanded(
+                    child: Text(
+                  scoreProvider.reasonForDeath,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline1,
                 )),

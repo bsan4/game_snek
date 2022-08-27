@@ -25,6 +25,7 @@ class EnemySnake extends ExampleSnake {
   EnemySnake(double localRadius, Vector2 initialPosition) : super(localRadius, initialPosition) {
     circleRadius = localRadius;
     velocity = 1.5;
+    setDirection(SnakeDirection.Right);
   }
 
   @override

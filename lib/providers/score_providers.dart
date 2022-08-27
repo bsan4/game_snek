@@ -22,6 +22,7 @@ class ScoreOnline {
 class ScoreProvider with ChangeNotifier {
   late int _myScore;
   late int _myBestScore;
+  late String _reasonForDeath = "";
   // final db = FirebaseFirestore.instance;
 
   List<ScoreOnline> fakeList = [
@@ -81,11 +82,19 @@ class ScoreProvider with ChangeNotifier {
     return true;
   }
 
+  void setReasonForDeath(String reasonText){
+    _reasonForDeath = reasonText;
+    notifyListeners();
+  }
+
   int get myScore {
     return _myScore;
   }
 
   int get myBestScore {
     return _myBestScore;
+  }
+  String get reasonForDeath {
+    return _reasonForDeath;
   }
 }
