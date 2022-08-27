@@ -67,43 +67,45 @@ class ExampleSnake extends CircleComponent
   @override
   void update(double dt) {
     //check for out of the screen
-    final gameSize = gameRef.size;
-    position = getNextPosition(direction);
-    if (position.x < 0) {
-      position.x = gameSize.x;
-    }
-    if (position.y < 0) {
-      position.y = gameSize.y;
-    }
-    if (position.x > gameSize.x) {
-      position.x = 0;
-    }
-    if (position.y > gameSize.y) {
-      position.y = 0;
-    }
-
-    /// add the current position at the top of the list
-    bodyPath.insert(0, Vector2(position.x, position.y));
-    /// remove the extraneous length and relocate the body parts on the path
-    Vector2 positionOfPreviousPart = position;
-    int bodyPartId = 0;
-    for(int i = 1; i < bodyPath.length; i++)
+    if (gameRef.gameState == GameState.running) {
+  final gameSize = gameRef.size;
+  position = getNextPosition(direction);
+  if (position.x < 0) {
+    position.x = gameSize.x;
+  }
+  if (position.y < 0) {
+    position.y = gameSize.y;
+  }
+  if (position.x > gameSize.x) {
+    position.x = 0;
+  }
+  if (position.y > gameSize.y) {
+    position.y = 0;
+  }
+  
+  /// add the current position at the top of the list
+  bodyPath.insert(0, Vector2(position.x, position.y));
+  /// remove the extraneous length and relocate the body parts on the path
+  Vector2 positionOfPreviousPart = position;
+  int bodyPartId = 0;
+  for(int i = 1; i < bodyPath.length; i++)
+  {
+    if(bodyParts.length > 0)
     {
-      if(bodyParts.length > 0)
-      {
-        double maxDistanceToPreviousPart = (bodyPartId>0)?bodyParts[bodyPartId-1].radius+bodyParts[bodyPartId].radius:circleRadius+bodyParts[bodyPartId].radius;
-        if(positionOfPreviousPart.distanceTo(bodyPath[i]) >= maxDistanceToPreviousPart){
-          positionOfPreviousPart = bodyPath[i];
-          bodyParts[bodyPartId].position.setFrom(bodyPath[i]);
-          bodyPartId++;
-          if(bodyPartId >= bodyParts.length){
-            bodyPath.removeRange(i, bodyPath.length);
-            break;
-          }
+      double maxDistanceToPreviousPart = (bodyPartId>0)?bodyParts[bodyPartId-1].radius+bodyParts[bodyPartId].radius:circleRadius+bodyParts[bodyPartId].radius;
+      if(positionOfPreviousPart.distanceTo(bodyPath[i]) >= maxDistanceToPreviousPart){
+        positionOfPreviousPart = bodyPath[i];
+        bodyParts[bodyPartId].position.setFrom(bodyPath[i]);
+        bodyPartId++;
+        if(bodyPartId >= bodyParts.length){
+          bodyPath.removeRange(i, bodyPath.length);
+          break;
         }
       }
     }
-    super.update(dt);
+  }
+  super.update(dt);
+}
   }
 
   Vector2 getNextPosition(localDirection) {
