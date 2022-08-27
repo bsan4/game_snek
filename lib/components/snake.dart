@@ -20,12 +20,12 @@ class ExampleSnake extends CircleComponent
   List<CircleComponent> bodyParts = [];
   List<Vector2> bodyPath = [];
 
-  ExampleSnake(double radius)
+  ExampleSnake(double radius, Vector2 initialPosition)
       : direction = SnakeDirection.Right,
         super(
           anchor: Anchor.center,
           radius: radius,
-          position: Vector2.all(200),
+          position: Vector2(initialPosition.x, initialPosition.y),
         );
   double velocity = 2.0;
   SnakeDirection direction;

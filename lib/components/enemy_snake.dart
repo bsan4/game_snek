@@ -20,7 +20,7 @@ import 'game.dart';
 /// Luckily for you, its speed is lowered by the weight of despair
 class EnemySnake extends ExampleSnake {
   double circleRadius = 10.0;
-  EnemySnake(double localRadius) : super(localRadius) {
+  EnemySnake(double localRadius, Vector2 initialPosition) : super(localRadius, initialPosition) {
     circleRadius = localRadius;
     velocity = 1.5;
   }
@@ -71,7 +71,7 @@ class EnemySnake extends ExampleSnake {
               collisionableOjects.add(collisionObject);
             }
           } else {
-            if (!bodyParts.contains(object))  {
+            if ( (bodyParts.length == 0) || (!identical(object, bodyParts[0])) ) {
               collisionableOjects.add(object);
             }
           }
@@ -123,6 +123,19 @@ class EnemySnake extends ExampleSnake {
     }
     ///Propagate the method
     super.update(dt);
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if( other is FoodManager){
+    }
+    else if (collisionableObjects.contains(other)){
+      gameRef.onEnemySuicide();
+    }
+    else if (gameRef.enemySnake.collisionableObjects.contains(other)){
+      gameRef.onEnemyAssasination();
+    }
+    super.onCollision(intersectionPoints, other);
   }
 
   Vector2 _getFoodCoordinates() {

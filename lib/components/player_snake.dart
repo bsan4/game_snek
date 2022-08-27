@@ -21,7 +21,7 @@ import 'game.dart';
 /// Luckily for you, its speed is lowered by the weight of despair
 class PlayerSnake extends ExampleSnake {
 
-  PlayerSnake(double localRadius) : super(localRadius) {
+  PlayerSnake(double localRadius, Vector2 initialPosition) : super(localRadius, initialPosition) {
     circleRadius = localRadius;
     velocity = 2.0;
   }

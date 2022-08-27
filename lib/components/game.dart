@@ -118,8 +118,8 @@ class MySnakeGame extends FlameGame
     foodManager = FoodManager(30, foodSprite);
     add(foodManager);
 
-    mySnake = PlayerSnake(15);
-    enemySnake = EnemySnake(10);
+    mySnake = PlayerSnake(15, Vector2(200,200));
+    enemySnake = EnemySnake(10, Vector2(250,300));
     // // add(
     // //   // RectangleHitbox(
     // //   //   anchor: Anchor.center,
