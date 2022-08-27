@@ -2,6 +2,8 @@ import 'package:flame/collisions.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/components.dart';
 
+import 'package:snake_snake/components/food_manager.dart';
+
 import 'game.dart';
 
 enum SnakeDirection {
@@ -13,6 +15,11 @@ enum SnakeDirection {
 
 class ExampleSnake extends CircleComponent
     with HasGameRef<MySnakeGame>, CollisionCallbacks {
+
+  double circleRadius = 10.0;
+  List<CircleComponent> bodyParts = [];
+  List<Vector2> bodyPath = [];
+
   ExampleSnake(double radius)
       : direction = SnakeDirection.Right,
         super(
@@ -42,38 +49,61 @@ class ExampleSnake extends CircleComponent
     }
   }
 
-  void setDirection(SnakeDirection localDirection) {
-    direction = localDirection;
+  /// Sets the new direction for the snake. Going backwards is forbidden.
+  /// If the new direction is a forbidden one, this method returns false
+  bool setDirection(SnakeDirection localDirection) {
+    if((direction == SnakeDirection.Right) && (localDirection != SnakeDirection.Left) 
+      || (direction == SnakeDirection.Left) && (localDirection != SnakeDirection.Right) 
+      || (direction == SnakeDirection.Up) && (localDirection != SnakeDirection.Down) 
+      || (direction == SnakeDirection.Down) && (localDirection != SnakeDirection.Up) ) {
+      direction = localDirection;
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
   @override
   void update(double dt) {
     //check for out of the screen
-    final topLeft = absoluteTopLeftPosition;
     final gameSize = gameRef.size;
-    if (topLeft.x < 0) {
-      setDirection(SnakeDirection.Right);
-    }
-    if (topLeft.y < 0) {
-      setDirection(SnakeDirection.Down);
-    }
-    final bottomRight = absolutePositionOfAnchor(Anchor.bottomRight);
-    if (bottomRight.x > gameSize.x) {
-      setDirection(SnakeDirection.Left);
-    }
-    if (bottomRight.y > gameSize.y) {
-      setDirection(SnakeDirection.Up);
-    }
     position = getNextPosition(direction);
-    super.update(dt);
-  }
+    if (position.x < 0) {
+      position.x = gameSize.x;
+    }
+    if (position.y < 0) {
+      position.y = gameSize.y;
+    }
+    if (position.x > gameSize.x) {
+      position.x = 0;
+    }
+    if (position.y > gameSize.y) {
+      position.y = 0;
+    }
 
-  @override
-  // ignore: unnecessary_overrides
-  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
-    //test qui j'ai touché et fait appel une methode du jeux en fonction
-    // via gameRef.${ma methode}
-    super.onCollision(intersectionPoints, other);
+    /// add the current position at the top of the list
+    bodyPath.insert(0, Vector2(position.x, position.y));
+    /// remove the extraneous length and relocate the body parts on the path
+    Vector2 positionOfPreviousPart = position;
+    int bodyPartId = 0;
+    for(int i = 1; i < bodyPath.length; i++)
+    {
+      if(bodyParts.length > 0)
+      {
+        double maxDistanceToPreviousPart = (bodyPartId>0)?bodyParts[bodyPartId-1].radius+bodyParts[bodyPartId].radius:circleRadius+bodyParts[bodyPartId].radius;
+        if(positionOfPreviousPart.distanceTo(bodyPath[i]) >= maxDistanceToPreviousPart){
+          positionOfPreviousPart = bodyPath[i];
+          bodyParts[bodyPartId].position.setFrom(bodyPath[i]);
+          bodyPartId++;
+          if(bodyPartId >= bodyParts.length){
+            bodyPath.removeRange(i, bodyPath.length);
+            break;
+          }
+        }
+      }
+    }
+    super.update(dt);
   }
 
   Vector2 getNextPosition(localDirection) {
@@ -94,5 +124,33 @@ class ExampleSnake extends CircleComponent
       default:
     }
     return nextPosition;
+  }
+
+  List<PositionComponent>  get collisionableObjects {
+    return [ this, ...bodyParts];
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if( other is FoodManager){
+      _addBodyPart();
+    }
+    super.onCollision(intersectionPoints, other);
+  }
+
+  void _addBodyPart()
+  {
+    /// add a nex component
+    CircleComponent newCircle = CircleComponent(radius : circleRadius, 
+          anchor: Anchor.center,
+          position: Vector2(position.x, position.y));
+    bodyParts.add(newCircle);
+    /// resize all elements to increasingly small diameters
+    int circleId = 0;
+    for (CircleComponent part in bodyParts){
+      part.radius = circleRadius*(1-1/(1+bodyParts.length-circleId));
+      circleId++;
+    }
+    parent?.add(newCircle);
   }
 }

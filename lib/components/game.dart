@@ -147,4 +147,16 @@ class MySnakeGame extends FlameGame
       buildContext?.read<ScoreProvider>().addScore(pointsToAdd);
     }
   }
+
+  void onEnemySuicide() {
+  }
+
+  void onEnemyAssasination() {
+  }
+
+  void onPlayerSuicide() {
+  }
+
+  void onPlayerAssasination() {
+  }
 }
