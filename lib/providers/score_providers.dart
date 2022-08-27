@@ -1,7 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+// import ''
 
 class ScoreOnline {
   int id;
@@ -21,7 +22,7 @@ class ScoreOnline {
 class ScoreProvider with ChangeNotifier {
   late int _myScore;
   late int _myBestScore;
-  final db = FirebaseFirestore.instance;
+  // final db = FirebaseFirestore.instance;
 
   List<ScoreOnline> fakeList = [
     ScoreOnline(
@@ -57,8 +58,8 @@ class ScoreProvider with ChangeNotifier {
     };
 
 // Add a new document with a generated ID
-    db.collection("scoresfirab").add(user).then((DocumentReference doc) =>
-        print('DocumentSnapshot added with ID: ${doc.id}'));
+    // db.collection("scoresfirab").add(user).then((DocumentReference doc) =>
+    //     print('DocumentSnapshot added with ID: ${doc.id}'));
     _myScore = 0;
     _myBestScore = 0;
   }
