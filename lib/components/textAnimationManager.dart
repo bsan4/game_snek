@@ -26,11 +26,15 @@ class TextAnimationManager extends Component {
     displayedDuration = 0;
     durationToDisplay = 2.0; // in seconds
     displaying = false;
-    textComponent = TextComponent(text : "");
+    if(children.contains(textComponent)){
+      remove(textComponent);
+    }
   }
 
   @override
   Future<void>? onLoad() {
+    displaying = true;
+    add(textComponent);
     return super.onLoad();
   }
 
@@ -39,8 +43,10 @@ class TextAnimationManager extends Component {
     if(displaying) {
       displayedDuration += dt;
       if(displayedDuration >= durationToDisplay) {
+        if(children.contains(textComponent)){
+          remove(textComponent);
+        }
         displaying = false;
-        remove(textComponent);
       }
     }
     
@@ -50,12 +56,16 @@ class TextAnimationManager extends Component {
 
   void displayText(String text, double duration)
   {
-    if(!displaying && textComponent != null) {
-      add(textComponent);
+    if(children.contains(textComponent)){
+      remove(textComponent);
     }
     displayedDuration = 0;
     displaying = true;
     textComponent.text = text;
     textComponent.position = initialPosition.clone();
+    
+    if(!children.contains(textComponent)){
+      add(textComponent);
+    }
   }
 }
