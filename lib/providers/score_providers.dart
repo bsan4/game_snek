@@ -68,10 +68,10 @@ class ScoreProvider with ChangeNotifier {
     final pref = await SharedPreferences.getInstance();
 
     _myBestScore = pref.getInt('bestScore') ?? 0;
-    _myName = pref.getString('name') ?? 'name${Random().nextInt(10000)}' ;
+    _myName = pref.getString('name') ?? 'name${Random().nextInt(10000)}';
 
     pref.setInt('bestScore', _myBestScore);
-    pref.setString('name', _myName) ;
+    pref.setString('name', _myName);
     return true;
   }
 
@@ -116,7 +116,8 @@ class ScoreProvider with ChangeNotifier {
       // var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
       // var isEmptyResponse = decodedResponse.isEmpty;
       // var uri = Uri.parse(decodedResponse['scores'] as String);
-      print(response.toString());
+      // print(response.toString());
+    } on Exception catch (e) {
     } finally {
       client.close();
     }
@@ -135,19 +136,18 @@ class ScoreProvider with ChangeNotifier {
     final pref = await SharedPreferences.getInstance();
     pref.setInt('bestScore', _myScore);
 
-    //set online if possible 
+    //set online if possible
     _myBestScore = _myScore;
     try {
-  var url = Uri.https(
-        'snek-a01db-default-rtdb.europe-west1.firebasedatabase.app',
-        '/score/${_myName}.json');
-  
-  var response = http.put(url, body: {
-    'bestscore' : '$_myBestScore'
-  });
-} on Exception catch (e) {
-  // TODO
-}
+      var url = Uri.https(
+          'snek-a01db-default-rtdb.europe-west1.firebasedatabase.app',
+          '/score/${_myName}.json');
+
+      var response = http.put(url, body: jsonEncode({'bestscore': '$_myBestScore'}));
+      var help = 1;
+    } on Exception catch (e) {
+      // TODO
+    }
 
     return true;
   }

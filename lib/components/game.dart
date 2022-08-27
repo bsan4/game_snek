@@ -150,6 +150,7 @@ class MySnakeGame extends FlameGame
     paused = true;
     gameState = GameState.gameOver;
     buildContext?.read<ScoreProvider>().setReasonForDeath(reasonForDeath);
+    buildContext?.read<ScoreProvider>().updateBestScore();
     overlays.add(GameOver.overlayName);
   }
 
