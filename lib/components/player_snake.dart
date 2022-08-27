@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
@@ -65,12 +66,19 @@ class PlayerSnakeBody extends ExampleSnake {
     return super.onLoad();
   }
 
+  // void updatePosition(Vector2 positionParent){
+  //   Vector2 delta = positionParent - position;
+    
+  //   position = positionParent;
+
+  // }
+
   @override
   void update(double dt) {
     // for(SnakeBody body in bodyTile){
     //   body.updatePos();
     // }
-    super.update(dt);
+    // super.update(dt);
   }
 
   @override
@@ -97,8 +105,8 @@ class PlayerSnakeManager extends PositionComponent {
 
   @override
   Future<void>? onLoad() async {
-    bodys.add(PlayerSnakeBody(20));
-    bodys.add(PlayerSnakeBody(10));
+    // bodys.add(PlayerSnakeBody(head));
+    // bodys.add(PlayerSnakeBody(bodys.last));
     await addAll(bodys);
     await add(head);
     return super.onLoad();
@@ -106,7 +114,11 @@ class PlayerSnakeManager extends PositionComponent {
 
   @override
   void update(double dt) {
-    // TODO: implement update
+    // head.update(dt);
+    // // bodys.first.updatePosition(head.position);
+    // for(int i = 1; i < bodys.length; i++){
+    //   bodys[i].updatePosition(bodys[i-1].position);
+    // }
     super.update(dt);
   }
 
@@ -121,4 +133,9 @@ class PlayerSnakeManager extends PositionComponent {
     objList.add(head);
     return objList;
   }
+
+  // List<PositionComponent> get  getCol{
+  //   return [head, ...bodys];
+  // } 
+
 }

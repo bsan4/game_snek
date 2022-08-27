@@ -8,8 +8,11 @@ import 'package:flame/input.dart';
 import 'package:flutter/material.dart' hide Gradient;
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:snake_snake/screen/gamescreen.dart';
 
 import 'components/game.dart';
+import 'providers/score_providers.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,68 +66,19 @@ class MyApp extends StatelessWidget {
         ),
       ),
     );
-    GameWidget<MySnakeGame> mySnakeGame = GameWidget<MySnakeGame>(
-      backgroundBuilder: (context) =>
-          LayoutBuilder(builder: (context, contraints) {
-        return SquareBackground();
-      }),
+  
+    return MultiProvider(
 
-      game: MySnakeGame(),
-      loadingBuilder: (context) => Center(
-        child: Text(
-          'Loading...',
-          style: Theme.of(context).textTheme.headline1,
-        ),
-      ),
-
-      // overlayBuilderMap: { // todo Overlay en fonction du jeux
-      //   'menu': (_, game) => Menu(game),
-      //   'gameover': (_, game) => GameOver(game),
-      // },
-      // initialActiveOverlays: const ['menu'],
-    );
-
-    return MaterialApp(
-      title: 'PadRacing',
-      home: mySnakeGame,
-      theme: theme,
-    );
-  }
-}
-
-class SquareBackground extends StatelessWidget {
-  var FIXEDTILESIZE = 30.0;
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    List<Widget> squareList = [];
-    final nbHeight = size.height ~/ FIXEDTILESIZE;
-
-    for (int i = 0; i < 10 * nbHeight; i++) {
-      squareList.add(
-        Container(
-          width: FIXEDTILESIZE,
-          height: FIXEDTILESIZE,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.pink, Colors.blue],
-              transform: GradientRotation((i % 3) * pi / 10),
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Center(
-      child: GridView(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 10,
-          childAspectRatio: 1.0,
-        ),
-        children: squareList.toList(),
+      providers: [
+        ChangeNotifierProvider(create: ((context) => ScoreProvider()))
+      ],
+      child: MaterialApp(
+        
+        title: 'PadRacing',
+        home: GameScreen(),
+        theme: theme,
       ),
     );
   }
 }
+
