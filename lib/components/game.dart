@@ -111,7 +111,7 @@ class MySnakeGame extends FlameGame
   @override
   Future<void>? onLoad() async {
     paused = true;
-    textAnimationManager = TextAnimationManager(Vector2(size.x/2, size.y/2));
+    textAnimationManager = TextAnimationManager(Vector2(50, 50));
     add(textAnimationManager);
 
     // TODO: implement onLoad
