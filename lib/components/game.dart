@@ -35,6 +35,9 @@ class MySnakeGame extends FlameGame
   late FoodManager foodManager;
   late GameState gameState;
 
+  Vector2 mySnakeInitialPosition = Vector2(200,250);
+  Vector2 enemySnakeInitialPosition = Vector2(250,300);
+
   //ici on va gerer la logique du jeux (score etc)
 
   double _gestureThreshold = 5;
@@ -121,8 +124,8 @@ class MySnakeGame extends FlameGame
     foodManager = FoodManager(30, foodSprite);
     add(foodManager);
 
-    mySnake = PlayerSnake(15, Vector2(200,200));
-    enemySnake = EnemySnake(10, Vector2(250,300));
+    mySnake = PlayerSnake(15, mySnakeInitialPosition.clone());
+    enemySnake = EnemySnake(10, enemySnakeInitialPosition.clone());
     // // add(
     // //   // RectangleHitbox(
     // //   //   anchor: Anchor.center,
@@ -143,6 +146,14 @@ class MySnakeGame extends FlameGame
     overlays.add(GameOver.overlayName);
   }
 
+  void resetGame() {
+    mySnake.position = mySnakeInitialPosition.clone();
+    enemySnake.position = enemySnakeInitialPosition.clone();
+    mySnake.reset();
+    enemySnake.reset();
+    buildContext?.read<ScoreProvider>().updateScore(0);
+  }
+
   void startGame() {
     //to do reset all component and score
     paused = false;
@@ -152,9 +163,10 @@ class MySnakeGame extends FlameGame
   }
   void reStartGame() {
     //to do reset all component and score
-
-    gameState = GameState.running;
     overlays.remove(GameOver.overlayName);
+    resetGame();
+    gameState = GameState.running;
+    paused = false;
   }
 
   void addScore(int pointsToAdd) {

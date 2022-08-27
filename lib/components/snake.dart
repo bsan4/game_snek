@@ -196,6 +196,13 @@ class ExampleSnake extends SpriteComponent
     super.onCollision(intersectionPoints, other);
   }
 
+  void reset(){
+    while (bodyParts.length > 0){
+      parent?.remove(bodyParts[0]);
+      bodyParts.removeAt(0);
+    }
+  }
+
   void _addBodyPart() async {
     /// add a new component
     Vector2 positionOfLastBodyPart = position.clone();

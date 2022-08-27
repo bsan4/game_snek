@@ -102,7 +102,7 @@ class _GameScreenState extends State<GameScreen> {
           StartUpMenu.overlayName
         ],
         overlayBuilderMap: {
-          GameOver.overlayName: (context, game) => GameOver(),
+          GameOver.overlayName: (context, game) => GameOver(game),
           StartUpMenu.overlayName: (context, game) => StartUpMenu(game)
         },
         backgroundBuilder: (context) =>
