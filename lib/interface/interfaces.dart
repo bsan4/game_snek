@@ -4,14 +4,23 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-// class BarScore extends StatelessWidget {
-//   const BarScore({Key? key}) : super(key: key);
 
-//   @override
-//   Widget build(BuildContext context)
+class GameOver extends StatelessWidget {
+  const GameOver({Key? key}) : super(key: key);
 
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Center(child: Card(
+
+        clipBehavior: Clip.antiAlias,
+        child: Image.asset('assets/images/background/Sans titre-4.png'),
+      ),),
+    );
+    
+  }
+}
 
 class SquareBackground extends StatelessWidget {
   var FIXEDTILESIZE = 30.0;

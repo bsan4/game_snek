@@ -8,19 +8,24 @@ import 'package:flame/input.dart';
 import 'package:flutter/material.dart' hide Gradient;
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:snake_snake/components/snake.dart';
 import 'package:snake_snake/components/player_snake.dart';
 import 'package:snake_snake/components/enemy_snake.dart';
+import 'package:snake_snake/providers/score_providers.dart';
 
 import 'food_manager.dart';
 
 class MySnakeGame extends FlameGame
     with HasCollisionDetection, PanDetector, KeyboardEvents {
-  MySnakeGame({Key? key}) : super();
+  MySnakeGame({
+    Key? key,
+  }) : super();
 
   late PlayerSnake mySnake;
   late EnemySnake enemySnake;
   late FoodManager foodManager;
+
   //ici on va gerer la logique du jeux (score etc)
 
   double _gestureThreshold = 5;
@@ -117,5 +122,12 @@ class MySnakeGame extends FlameGame
     add(mySnake);
     add(enemySnake);
     return super.onLoad();
+  }
+
+  void addScore(int pointsToAdd) {
+    // scoreProvider.addScore(pointsToAdd);
+    if (buildContext != null) {
+      buildContext?.read<ScoreProvider>().addScore(pointsToAdd);
+    }
   }
 }

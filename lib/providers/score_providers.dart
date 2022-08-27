@@ -16,6 +16,11 @@ class ScoreProvider with ChangeNotifier{
     _myScore = newScore;
     return true;
   }
+  bool addScore(int pointToAdd){
+    _myScore += pointToAdd;
+    notifyListeners();
+    return true;
+  }
 
 
   int get myScore {

@@ -56,18 +56,8 @@ class FoodManager extends SpriteGroupComponent<FoodType>
   @override
   void render(Canvas canvas) {
     // TODO: implement render
-    Paint rectPain = Paint();
-    rectPain.color = Colors.grey.withOpacity(0.6);
-    canvas.drawRect(
-        Rect.fromCenter(
-          center: Offset(
-            size.x / 2,
-            size.y / 2,
-          ),
-          height: size.y,
-          width: size.x,
-        ),
-        rectPain);
+    
+   
     // canvas.drawRect(
     //     Rect.fromLTRB(
     //         position.x - size.x,
