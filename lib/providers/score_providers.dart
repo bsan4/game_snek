@@ -1,5 +1,6 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -23,6 +24,7 @@ class ScoreOnline {
 class ScoreProvider with ChangeNotifier {
   late int _myScore;
   late int _myBestScore;
+  late String _myName;
   late String _reasonForDeath = "";
   // final db = FirebaseFirestore.instance;
 
@@ -66,6 +68,10 @@ class ScoreProvider with ChangeNotifier {
     final pref = await SharedPreferences.getInstance();
 
     _myBestScore = pref.getInt('bestScore') ?? 0;
+    _myName = pref.getString('name') ?? 'name${Random().nextInt(10000)}' ;
+
+    pref.setInt('bestScore', _myBestScore);
+    pref.setString('name', _myName) ;
     return true;
   }
 
@@ -128,7 +134,21 @@ class ScoreProvider with ChangeNotifier {
   Future<bool> updateBestScore(int newScore) async {
     final pref = await SharedPreferences.getInstance();
     pref.setInt('bestScore', newScore);
+
+    //set online if possible 
     _myBestScore = newScore;
+    try {
+  var url = Uri.https(
+        'snek-a01db-default-rtdb.europe-west1.firebasedatabase.app',
+        '/score/${_myName}.json');
+  
+  var response = http.put(url, body: {
+    'bestscore' : '$_myBestScore'
+  });
+} on Exception catch (e) {
+  // TODO
+}
+
     return true;
   }
 
