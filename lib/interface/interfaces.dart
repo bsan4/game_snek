@@ -5,6 +5,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:snake_snake/components/game.dart';
 import 'package:snake_snake/providers/score_providers.dart';
 
 class GameOver extends StatelessWidget {
@@ -88,9 +89,10 @@ class GameOver extends StatelessWidget {
 }
 
 class StartUpMenu extends StatelessWidget {
-  const StartUpMenu({Key? key}) : super(key: key);
+   StartUpMenu(this.game, {Key? key}) : super(key: key);
 
   static const overlayName = 'zizi';
+  MySnakeGame game;
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +144,9 @@ class StartUpMenu extends StatelessWidget {
                     child: ElevatedButton(
                       style:
                           ElevatedButton.styleFrom(primary: Colors.transparent),
-                      onPressed: (() {}),
+                      onPressed: (() {
+                        game.startGame();
+                      }),
                       child: Text('Play'),
                     ),
                   ),
