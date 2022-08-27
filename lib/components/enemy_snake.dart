@@ -63,9 +63,9 @@ class EnemySnake extends ExampleSnake {
     for (Component object in objectsOnMap) {
       if (object is PositionComponent) {
         if ((object is! FoodManager) && !identical(object, this)) {
-          if (object is PlayerSnakeManager) {
+          if (object is PlayerSnake) {
             List<PositionComponent> playerSnakeManagerObjects =
-                object.getCollisionableObjects();
+                object.collisionableObjects;
             for (PositionComponent collisionObject
                 in playerSnakeManagerObjects) {
               collisionableOjects.add(collisionObject);
