@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,8 @@ class GameOver extends StatelessWidget {
 
           height: MediaQuery.of(context).size.height * 0.6,
           decoration: BoxDecoration(
-            image: DecorationImage(fit: BoxFit.cover,
+            image: DecorationImage(
+              fit: BoxFit.cover,
               image: AssetImage('assets/images/background/Sans titre-4.png'),
             ),
           ),
@@ -29,15 +31,22 @@ class GameOver extends StatelessWidget {
           child:
               Consumer<ScoreProvider>(builder: (context, scoreProvider, child) {
             return Column(
-              
               // mainAxisSize: MainAxisSize.,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Expanded(child: Text('GameOver', textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline1,)),
-                Expanded(child: Text('Your Score ${scoreProvider.myScore}', textAlign: TextAlign.center,)),
                 Expanded(
-
+                    child: Text(
+                  'GameOver',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headline1,
+                )),
+                Expanded(
+                    child: Text(
+                  'Your Score ${scoreProvider.myScore}',
+                  textAlign: TextAlign.center,
+                )),
+                Expanded(
                   child: FutureBuilder<List<ScoreOnline>>(
                     future: scoreProvider.bestScores(),
                     builder: (context, snapshot) {
@@ -47,7 +56,7 @@ class GameOver extends StatelessWidget {
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 24.0),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: (snapshot.data
                                   ?.map(
                                     (scorer) => Card(
@@ -66,6 +75,88 @@ class GameOver extends StatelessWidget {
                                   .toList() as List<Card>)),
                         );
                     },
+                  ),
+                ),
+                Spacer()
+              ],
+            );
+          }),
+        ),
+      ),
+    );
+  }
+}
+
+class StartUpMenu extends StatelessWidget {
+  const StartUpMenu({Key? key}) : super(key: key);
+
+  static const overlayName = 'zizi';
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(40.0),
+        child: Container(
+          alignment: Alignment.bottomCenter,
+          height: MediaQuery.of(context).size.height * 0.6,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage('assets/images/background/Sans titre-4.png'),
+            ),
+          ),
+          // alignment: Alignment.center,
+          child:
+              Consumer<ScoreProvider>(builder: (context, scoreProvider, child) {
+            return Column(
+              // mainAxisSize: MainAxisSize.,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(
+                    child: AnimatedTextKit(
+                  isRepeatingAnimation: true,
+                  repeatForever: true,
+                  animatedTexts: [
+                    ScaleAnimatedText(
+                      'Snakes : The Game',
+                      textAlign: TextAlign.center,
+                      textStyle: Theme.of(context).textTheme.headline1,
+                    ),
+                  ],
+                )),
+                Expanded(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      'Your BestScore ${scoreProvider.myBestScore}',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: 24.0),
+                    child: ElevatedButton(
+                      style:
+                          ElevatedButton.styleFrom(primary: Colors.transparent),
+                      onPressed: (() {}),
+                      child: Text('Play'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: 24.0),
+                    child: ElevatedButton(
+                      style:
+                          ElevatedButton.styleFrom(primary: Colors.transparent),
+                      onPressed: (() {}),
+                      child: Text('Buy my a beer'),
+                    ),
                   ),
                 ),
                 Spacer()
@@ -130,8 +221,6 @@ class CorrectBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     terrainRect = backgroundRect.deflate(100);
 
-    print('terrain : ${terrainRect.toString()}');
-    print('background : ${backgroundRect.toString()}');
     return ClipRRect(
       borderRadius: BorderRadius.circular(30.0),
       child: Stack(

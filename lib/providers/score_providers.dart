@@ -19,6 +19,7 @@ class ScoreOnline {
 
 class ScoreProvider with ChangeNotifier {
   late int _myScore;
+  late int _myBestScore;
 
   List<ScoreOnline> fakeList = [
     ScoreOnline(
@@ -47,6 +48,7 @@ class ScoreProvider with ChangeNotifier {
   ScoreProvider() {
     //todo chope le score en local ou en ligne si on le temps
     _myScore = 0;
+    _myBestScore = 0;
   }
 
   Future<List<ScoreOnline>> bestScores() async {
@@ -68,5 +70,8 @@ class ScoreProvider with ChangeNotifier {
 
   int get myScore {
     return _myScore;
+  }
+  int get myBestScore {
+    return _myBestScore;
   }
 }
