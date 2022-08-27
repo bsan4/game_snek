@@ -71,7 +71,9 @@ class EnemySnake extends ExampleSnake {
               collisionableOjects.add(collisionObject);
             }
           } else {
-            collisionableOjects.add(object);
+            if (!bodyParts.contains(object))  {
+              collisionableOjects.add(object);
+            }
           }
         }
       }
@@ -110,10 +112,15 @@ class EnemySnake extends ExampleSnake {
       }
     }
 
+    bool newDirectionValid = false;
     if (newDirection != direction) {
-      setDirection(newDirection);
+      newDirectionValid = setDirection(newDirection);
+      while(!newDirectionValid)
+      {
+        newDirection = directions[Random().nextInt(directions.length)];
+        newDirectionValid = setDirection(newDirection);
+      }
     }
-
     ///Propagate the method
     super.update(dt);
   }
