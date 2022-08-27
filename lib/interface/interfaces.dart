@@ -43,17 +43,21 @@ class GameOver extends StatelessWidget {
                   style: Theme.of(context).textTheme.headline1,
                 )),
                 Expanded(
-                    child: Text(
+                    child: FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Text(
                   scoreProvider.reasonForDeath,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headline1,
-                )),
+                ),
+                    )),
                 Expanded(
                     child: Text(
                   'Your Score ${scoreProvider.myScore}',
                   textAlign: TextAlign.center,
                 )),
                 Expanded(
+                  flex: 2,
                   child: FutureBuilder<List<ScoreOnline>>(
                     future: scoreProvider.bestScores(),
                     builder: (context, snapshot) {
@@ -66,28 +70,27 @@ class GameOver extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: (snapshot.data
                                   ?.map(
-                                    (scorer) => Card(
-                                      color: Colors.transparent,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Text(scorer.nameScorer),
-                                          Text(scorer.score.toString()),
-                                          Text(scorer.rank.toString()),
-                                        ],
-                                      ),
+                                    (scorer) => Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        FittedBox(fit : BoxFit.fitHeight, child: Text(scorer.nameScorer)),
+                                        FittedBox(fit : BoxFit.fitHeight,  child: Text(scorer.score.toString())),
+                                        // Text(scorer.rank.toString()),
+                                      ],
                                     ),
                                   )
-                                  .toList() as List<Card>)),
+                                  .toList() as List<Row>)),
                         );
                     },
                   ),
                 ),
                 Spacer(), 
-                ElevatedButton(onPressed: () {
-                  game.reStartGame();
-                }, child: Text('Restart'),)
+                Expanded(
+                  child: ElevatedButton(onPressed: () {
+                    game.reStartGame();
+                  }, child: Text('Restart'),),
+                )
               ],
             );
           }),
@@ -147,6 +150,7 @@ class StartUpMenu extends StatelessWidget {
                   ),
                 ),
                 Expanded(
+                  flex: 1,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 24.0),

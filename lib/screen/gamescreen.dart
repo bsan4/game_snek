@@ -45,15 +45,15 @@ class _GameScreenState extends State<GameScreen> {
       backgroundColor: Colors.transparent,
       title:  Text('Snakes', style: Theme.of(context).textTheme.headline1),
       centerTitle: true,
-      leading: IconButton(
-          autofocus: false,
-          focusNode: buttonFocus,
-          // highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          // hoverColor: Colors.transparent,
-          focusColor: Colors.transparent,
-          icon: const Icon(Icons.menu),
-          onPressed: () => null),
+      // leading: IconButton(
+      //     autofocus: false,
+      //     focusNode: buttonFocus,
+      //     // highlightColor: Colors.transparent,
+      //     splashColor: Colors.transparent,
+      //     // hoverColor: Colors.transparent,
+      //     focusColor: Colors.transparent,
+      //     icon: const Icon(Icons.menu),
+      //     onPressed: () => null),
       elevation: 0,
       actions: [
         Consumer<ScoreProvider>(
@@ -102,7 +102,7 @@ class _GameScreenState extends State<GameScreen> {
           StartUpMenu.overlayName
         ],
         overlayBuilderMap: {
-          GameOver.overlayName: (context, game) => GameOver(),
+          GameOver.overlayName: (context, game) => GameOver(game),
           StartUpMenu.overlayName: (context, game) => StartUpMenu(game)
         },
         backgroundBuilder: (context) =>
