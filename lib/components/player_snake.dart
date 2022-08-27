@@ -24,6 +24,7 @@ class PlayerSnake extends ExampleSnake {
   PlayerSnake(double localRadius, Vector2 initialPosition) : super(localRadius, initialPosition) {
     circleRadius = localRadius;
     velocity = 2.0;
+    setDirection(SnakeDirection.Right);
   }
 
   @override
@@ -47,7 +48,9 @@ class PlayerSnake extends ExampleSnake {
       gameRef.addScore(1);
     }
     else if (collisionableObjects.contains(other)){
-      gameRef.onPlayerSuicide();
+      if(!identical(other, bodyParts[0])){
+        gameRef.onPlayerSuicide();
+      }
     }
     else if (gameRef.enemySnake.collisionableObjects.contains(other)){
       gameRef.onPlayerAssasination();
