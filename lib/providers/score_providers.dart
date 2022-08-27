@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 // import ''
 
 class ScoreOnline {
@@ -52,17 +54,14 @@ class ScoreProvider with ChangeNotifier {
   ScoreProvider() {
     //todo chope le score en local ou en ligne si on le temps
     // Create a new user with a first and last name
-    final user = <String, dynamic>{
-      "id": "3",
-      "name": "James",
-      "score": 120
-    };
+
 
 // Add a new document with a generated ID
     // db.collection("scoresfirab").add(user).then((DocumentReference doc) =>
     //     print('DocumentSnapshot added with ID: ${doc.id}'));
     _myScore = 0;
-    _myBestScore = 0;
+    // _myBestScore = 0;
+    retrieveBestScores();
   }
 
   Future<List<ScoreOnline>> bestScores() async {
@@ -70,9 +69,21 @@ class ScoreProvider with ChangeNotifier {
 
     return fakeList;
   }
+  Future<bool> retrieveBestScores() async {
+    final pref = await SharedPreferences.getInstance();
+
+    _myBestScore = pref.getInt('bestScore')?? 0;
+    return true ;
+  }
 
   bool updateScore(int newScore) {
     _myScore = newScore;
+    return true;
+  }
+  Future<bool> updateBestScore(int newScore) async {
+    final pref = await SharedPreferences.getInstance();
+    pref.setInt('bestScore', newScore);
+    _myBestScore = newScore;
     return true;
   }
 
