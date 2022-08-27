@@ -179,11 +179,14 @@ class MySnakeGame extends FlameGame
 
   void addScore(int pointsToAdd) {
     // scoreProvider.addScore(pointsToAdd);
-    textAnimationManager.displayText("Tasty ! +1", 2);
     if (buildContext != null) {
       buildContext?.read<ScoreProvider>().addScore(pointsToAdd);
     }
 
+  }
+
+  void onFoodEatenByPlayer() {
+    textAnimationManager.displayText("Tasty ! +1", 2);
   }
 
   void onEnemySuicide() {

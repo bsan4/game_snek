@@ -42,6 +42,7 @@ class PlayerSnake extends ExampleSnake {
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     if( other is FoodManager){
+      gameRef.onFoodEatenByPlayer();
       gameRef.addScore(1);
     }
     else if (collisionableObjects.contains(other)){
