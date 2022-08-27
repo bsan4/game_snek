@@ -176,7 +176,14 @@ class StartUpMenu extends StatelessWidget {
                     ),
                   ),
                 ),
-                Spacer()
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 100.0, vertical: 24.0),
+                    child: Text('Thx Ghostpixxells_pixelfood for the pngs!', textAlign : TextAlign.center),
+                  ),
+                ),
+                Spacer(),
               ],
             );
           }),
