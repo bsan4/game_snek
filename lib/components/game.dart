@@ -18,15 +18,17 @@ import 'package:snake_snake/providers/score_providers.dart';
 import 'food_manager.dart';
 
 enum GameState {
-  running, 
-  pause, gameOver,
+  running,
+  pause,
+  gameOver,
 }
 
 class MySnakeGame extends FlameGame
     with HasCollisionDetection, PanDetector, KeyboardEvents {
   MySnakeGame({
     Key? key,
-  }) : super();
+  })  : gameState = GameState.pause,
+        super();
 
   late PlayerSnake mySnake;
   late EnemySnake enemySnake;
@@ -132,21 +134,18 @@ class MySnakeGame extends FlameGame
     return super.onLoad();
   }
 
-  void gameOver(){
-
-    //to do reset all component and score 
+  void gameOver() {
+    //to do reset all component and score
 
     gameState = GameState.gameOver;
     overlays.add(GameOver.overlayName);
-
   }
-  void startGame(){
 
-    //to do reset all component and score 
+  void startGame() {
+    //to do reset all component and score
 
     gameState = GameState.running;
     overlays.remove(StartUpMenu.overlayName);
-
   }
 
   void addScore(int pointsToAdd) {
@@ -156,15 +155,11 @@ class MySnakeGame extends FlameGame
     }
   }
 
-  void onEnemySuicide() {
-  }
+  void onEnemySuicide() {}
 
-  void onEnemyAssasination() {
-  }
+  void onEnemyAssasination() {}
 
-  void onPlayerSuicide() {
-  }
+  void onPlayerSuicide() {}
 
-  void onPlayerAssasination() {
-  }
+  void onPlayerAssasination() {}
 }

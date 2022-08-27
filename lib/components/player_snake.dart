@@ -6,7 +6,7 @@ import 'package:flame/experimental.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flutter/material.dart' hide Gradient;
+import 'package:flutter/material.dart' hide Gradient, Image;
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:snake_snake/components/player_snake.dart';
@@ -27,7 +27,11 @@ class PlayerSnake extends ExampleSnake {
   }
 
   @override
-  Future<void>? onLoad() {
+  Future<void>? onLoad() async {
+    isEvil = false;
+    
+// final headSprite = await Sprite.load('snakes/13.png');
+// sprite = headSprite;
     return super.onLoad();
   }
 
