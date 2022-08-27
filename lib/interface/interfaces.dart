@@ -3,22 +3,78 @@ import 'dart:ui';
 
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:snake_snake/providers/score_providers.dart';
 
 class GameOver extends StatelessWidget {
   const GameOver({Key? key}) : super(key: key);
 
+  static const overlayName = 'gameover';
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Center(child: Card(
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Container(
+          alignment: Alignment.bottomCenter,
 
-        clipBehavior: Clip.antiAlias,
-        child: Image.asset('assets/images/background/Sans titre-4.png'),
-      ),),
+          height: MediaQuery.of(context).size.height * 0.6,
+          decoration: BoxDecoration(
+            image: DecorationImage(fit: BoxFit.cover,
+              image: AssetImage('assets/images/background/Sans titre-4.png'),
+            ),
+          ),
+          // alignment: Alignment.center,
+          child:
+              Consumer<ScoreProvider>(builder: (context, scoreProvider, child) {
+            return Column(
+              
+              // mainAxisSize: MainAxisSize.,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Expanded(child: Text('GameOver', textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline1,)),
+                Expanded(child: Text('Your Score ${scoreProvider.myScore}', textAlign: TextAlign.center,)),
+                Expanded(
+
+                  child: FutureBuilder<List<ScoreOnline>>(
+                    future: scoreProvider.bestScores(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(child: CircularProgressIndicator());
+                      } else
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 24.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: (snapshot.data
+                                  ?.map(
+                                    (scorer) => Card(
+                                      color: Colors.transparent,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text(scorer.nameScorer),
+                                          Text(scorer.score.toString()),
+                                          Text(scorer.rank.toString()),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                  .toList() as List<Card>)),
+                        );
+                    },
+                  ),
+                ),
+                Spacer()
+              ],
+            );
+          }),
+        ),
+      ),
     );
-    
   }
 }
 
@@ -76,25 +132,22 @@ class CorrectBackground extends StatelessWidget {
 
     print('terrain : ${terrainRect.toString()}');
     print('background : ${backgroundRect.toString()}');
-    return   ClipRRect(
-                  borderRadius: BorderRadius.circular(30.0),
-
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Image.asset('assets/images/background/Sans titre-3.png',fit: BoxFit.cover),
-                      BackdropFilter(
-                        filter: ImageFilter.blur(
-                          sigmaX: 5,
-                          sigmaY: 5,
-                        ),
-                        child: Container(
-                          
-                          ),
-
-                        ),
-                    ],
-                  ),
-                  );
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(30.0),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset('assets/images/background/Sans titre-3.png',
+              fit: BoxFit.cover),
+          BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 5,
+              sigmaY: 5,
+            ),
+            child: Container(),
+          ),
+        ],
+      ),
+    );
   }
 }

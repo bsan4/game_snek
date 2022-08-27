@@ -100,10 +100,10 @@ class _GameScreenState extends State<GameScreen> {
 
         body: GameWidget<MySnakeGame>(
           initialActiveOverlays: [
-            // 'gameover' ,
+            GameOver.overlayName ,
           ],
           overlayBuilderMap: {
-            'gameover' :(context, game) => GameOver()
+            GameOver.overlayName :(context, game) => GameOver()
           },
           backgroundBuilder: (context) =>
               LayoutBuilder(builder: (context, contraints) {
