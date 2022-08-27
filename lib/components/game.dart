@@ -12,8 +12,10 @@ import 'package:provider/provider.dart';
 import 'package:snake_snake/components/snake.dart';
 import 'package:snake_snake/components/player_snake.dart';
 import 'package:snake_snake/components/enemy_snake.dart';
+import 'package:snake_snake/components/textAnimationManager.dart';
 import 'package:snake_snake/interface/interfaces.dart';
 import 'package:snake_snake/providers/score_providers.dart';
+import 'package:snake_snake/components/textAnimationManager.dart';
 
 import 'food_manager.dart';
 
@@ -34,6 +36,10 @@ class MySnakeGame extends FlameGame
   late EnemySnake enemySnake;
   late FoodManager foodManager;
   late GameState gameState;
+  late TextAnimationManager textAnimationManager;
+
+  Vector2 mySnakeInitialPosition = Vector2(200,250);
+  Vector2 enemySnakeInitialPosition = Vector2(250,300);
 
   //ici on va gerer la logique du jeux (score etc)
 
@@ -105,6 +111,9 @@ class MySnakeGame extends FlameGame
   @override
   Future<void>? onLoad() async {
     paused = true;
+    textAnimationManager = TextAnimationManager(Vector2(size.x/2, size.y/2));
+    add(textAnimationManager);
+
     // TODO: implement onLoad
 
     //ici on va ajouter les composentes de notre jeux
@@ -121,8 +130,8 @@ class MySnakeGame extends FlameGame
     foodManager = FoodManager(30, foodSprite);
     add(foodManager);
 
-    mySnake = PlayerSnake(15, Vector2(200,200));
-    enemySnake = EnemySnake(10, Vector2(250,300));
+    mySnake = PlayerSnake(15, mySnakeInitialPosition.clone());
+    enemySnake = EnemySnake(10, enemySnakeInitialPosition.clone());
     // // add(
     // //   // RectangleHitbox(
     // //   //   anchor: Anchor.center,
@@ -138,9 +147,19 @@ class MySnakeGame extends FlameGame
   void gameOver(String reasonForDeath) {
     //to do reset all component and score
 
+    paused = true;
     gameState = GameState.gameOver;
     buildContext?.read<ScoreProvider>().setReasonForDeath(reasonForDeath);
     overlays.add(GameOver.overlayName);
+  }
+
+  void resetGame() {
+    mySnake.position = mySnakeInitialPosition.clone();
+    enemySnake.position = enemySnakeInitialPosition.clone();
+    mySnake.reset();
+    enemySnake.reset();
+    textAnimationManager.reset();
+    buildContext?.read<ScoreProvider>().updateScore(0);
   }
 
   void startGame() {
@@ -152,21 +171,32 @@ class MySnakeGame extends FlameGame
   }
   void reStartGame() {
     //to do reset all component and score
-
-    gameState = GameState.running;
     overlays.remove(GameOver.overlayName);
+    resetGame();
+    gameState = GameState.running;
+    paused = false;
   }
 
   void addScore(int pointsToAdd) {
     // scoreProvider.addScore(pointsToAdd);
+    textAnimationManager.displayText("Tasty ! +1", 2);
     if (buildContext != null) {
       buildContext?.read<ScoreProvider>().addScore(pointsToAdd);
     }
+
   }
 
-  void onEnemySuicide() {}
+  void onEnemySuicide() {
+    textAnimationManager.displayText("Enemy suicide ! +10", 2);
+    enemySnake.reset();
+    enemySnake.position = enemySnakeInitialPosition.clone();
+  }
 
-  void onEnemyAssasination() {}
+  void onEnemyAssasination() {
+    textAnimationManager.displayText("Enemy ASSASSINATION ! Nice ! +15", 2);
+    enemySnake.reset();
+    enemySnake.position = enemySnakeInitialPosition.clone();
+  }
 
   void onPlayerSuicide() {gameOver("Suicide");}
 

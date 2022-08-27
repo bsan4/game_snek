@@ -121,6 +121,7 @@ class ScoreProvider with ChangeNotifier {
 
   bool updateScore(int newScore) {
     _myScore = newScore;
+    notifyListeners();
     return true;
   }
 
