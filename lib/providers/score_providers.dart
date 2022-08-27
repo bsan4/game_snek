@@ -131,12 +131,12 @@ class ScoreProvider with ChangeNotifier {
     return true;
   }
 
-  Future<bool> updateBestScore(int newScore) async {
+  Future<bool> updateBestScore() async {
     final pref = await SharedPreferences.getInstance();
-    pref.setInt('bestScore', newScore);
+    pref.setInt('bestScore', _myScore);
 
     //set online if possible 
-    _myBestScore = newScore;
+    _myBestScore = _myScore;
     try {
   var url = Uri.https(
         'snek-a01db-default-rtdb.europe-west1.firebasedatabase.app',
