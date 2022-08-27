@@ -43,7 +43,7 @@ class FoodManager extends SpriteGroupComponent<FoodType>
     } ;
     current = FoodType.sushi;
     position = Vector2.all(300);
-    print(position);
+
     size = Vector2.all(tileSize);
     anchor = Anchor.center;
     // sprite = localSprite;

@@ -43,13 +43,13 @@ class _GameScreenState extends State<GameScreen> {
 
     AppBar appBar = AppBar(
       backgroundColor: Colors.transparent,
-      title: const Text('Snakes'),
+      title:  Text('Snakes', style: Theme.of(context).textTheme.headline1),
       centerTitle: true,
       leading: IconButton(
           autofocus: false,
           focusNode: buttonFocus,
           // highlightColor: Colors.transparent,
-          // splashColor: Colors.transparent,
+          splashColor: Colors.transparent,
           // hoverColor: Colors.transparent,
           focusColor: Colors.transparent,
           icon: const Icon(Icons.menu),
@@ -95,30 +95,29 @@ class _GameScreenState extends State<GameScreen> {
     // );
 
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: appBar,
-
-        body: GameWidget<MySnakeGame>(
-          initialActiveOverlays: [
-            GameOver.overlayName ,
-          ],
-          overlayBuilderMap: {
-            GameOver.overlayName :(context, game) => GameOver()
-          },
-          backgroundBuilder: (context) =>
-              LayoutBuilder(builder: (context, contraints) {
-            return CorrectBackground(backgroundRect: screen);
-          }),
-          game: MySnakeGame(),
-          // focusNode: gameFocus,
-          loadingBuilder: (context) => Center(
-            child: Text(
-              'Loading...',
-              style: Theme.of(context).textTheme.headline1,
-            ),
+      extendBodyBehindAppBar: true,
+      appBar: appBar,
+      body: GameWidget<MySnakeGame>(
+        initialActiveOverlays: [
+          StartUpMenu.overlayName
+        ],
+        overlayBuilderMap: {
+          GameOver.overlayName: (context, game) => GameOver(),
+          StartUpMenu.overlayName: (context, game) => StartUpMenu(game)
+        },
+        backgroundBuilder: (context) =>
+            LayoutBuilder(builder: (context, contraints) {
+          return CorrectBackground(backgroundRect: screen);
+        }),
+        game: MySnakeGame(),
+        // focusNode: gameFocus,
+        loadingBuilder: (context) => Center(
+          child: Text(
+            'Loading...',
+            style: Theme.of(context).textTheme.headline1,
           ),
         ),
-      );
-    
+      ),
+    );
   }
 }
