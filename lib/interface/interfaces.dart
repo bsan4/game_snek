@@ -9,8 +9,8 @@ import 'package:snake_snake/components/game.dart';
 import 'package:snake_snake/providers/score_providers.dart';
 
 class GameOver extends StatelessWidget {
-  const GameOver({Key? key}) : super(key: key);
-
+  GameOver(this.game, {Key? key}) : super(key: key);
+  MySnakeGame game;
   static const overlayName = 'gameover';
 
   @override
@@ -84,7 +84,10 @@ class GameOver extends StatelessWidget {
                     },
                   ),
                 ),
-                Spacer()
+                Spacer(), 
+                ElevatedButton(onPressed: () {
+                  game.reStartGame();
+                }, child: Text('Restart'),)
               ],
             );
           }),
@@ -95,7 +98,7 @@ class GameOver extends StatelessWidget {
 }
 
 class StartUpMenu extends StatelessWidget {
-   StartUpMenu(this.game, {Key? key}) : super(key: key);
+  StartUpMenu(this.game, {Key? key}) : super(key: key);
 
   static const overlayName = 'zizi';
   MySnakeGame game;

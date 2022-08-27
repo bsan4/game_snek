@@ -150,6 +150,12 @@ class MySnakeGame extends FlameGame
     gameState = GameState.running;
     overlays.remove(StartUpMenu.overlayName);
   }
+  void reStartGame() {
+    //to do reset all component and score
+
+    gameState = GameState.running;
+    overlays.remove(GameOver.overlayName);
+  }
 
   void addScore(int pointsToAdd) {
     // scoreProvider.addScore(pointsToAdd);

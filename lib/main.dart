@@ -1,5 +1,6 @@
 import 'dart:math';
 
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/flame.dart';
@@ -12,10 +13,14 @@ import 'package:provider/provider.dart';
 import 'package:snake_snake/screen/gamescreen.dart';
 
 import 'components/game.dart';
+// import 'firebase_options.dart';
 import 'providers/score_providers.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//   options: DefaultFirebaseOptions.currentPlatform,
+// );
   runApp(
     const MyApp(),
   );
