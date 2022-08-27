@@ -12,9 +12,15 @@ import 'package:provider/provider.dart';
 import 'package:snake_snake/components/snake.dart';
 import 'package:snake_snake/components/player_snake.dart';
 import 'package:snake_snake/components/enemy_snake.dart';
+import 'package:snake_snake/interface/interfaces.dart';
 import 'package:snake_snake/providers/score_providers.dart';
 
 import 'food_manager.dart';
+
+enum GameState {
+  running, 
+  pause, gameOver,
+}
 
 class MySnakeGame extends FlameGame
     with HasCollisionDetection, PanDetector, KeyboardEvents {
@@ -25,6 +31,7 @@ class MySnakeGame extends FlameGame
   late PlayerSnake mySnake;
   late EnemySnake enemySnake;
   late FoodManager foodManager;
+  late GameState gameState;
 
   //ici on va gerer la logique du jeux (score etc)
 
@@ -101,6 +108,7 @@ class MySnakeGame extends FlameGame
     // add(BackgroundLayer(sizeEcran))
     // add(PlayerSnake());
     // add(EnemieSnake());
+    gameState = GameState.running;
     await images.loadAll([
       'Ghostpixxells_pixelfood/97_sushi.png',
       'Ghostpixxells_pixelfood/99_taco.png',
@@ -122,6 +130,15 @@ class MySnakeGame extends FlameGame
     add(mySnake);
     add(enemySnake);
     return super.onLoad();
+  }
+
+  void gameOver(){
+
+    //to do reset all component and score 
+
+    gameState = GameState.gameOver;
+    overlays.add(GameOver.overlayName);
+
   }
 
   void addScore(int pointsToAdd) {
