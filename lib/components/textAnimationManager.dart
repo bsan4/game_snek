@@ -26,7 +26,7 @@ class TextAnimationManager extends Component {
     displayedDuration = 0;
     durationToDisplay = 2.0; // in seconds
     displaying = false;
-    textComponent.text = "";
+    textComponent = TextComponent(text : "");
   }
 
   @override
@@ -50,7 +50,7 @@ class TextAnimationManager extends Component {
 
   void displayText(String text, double duration)
   {
-    if(!displaying) {
+    if(!displaying && textComponent != null) {
       add(textComponent);
     }
     displayedDuration = 0;

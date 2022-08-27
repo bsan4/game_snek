@@ -53,7 +53,7 @@ class GameOver extends StatelessWidget {
                     )),
                 Expanded(
                     child: Text(
-                  'Your Score ${scoreProvider.myScore}',
+                  '${scoreProvider.myName} : ${scoreProvider.myScore}',
                   textAlign: TextAlign.center,
                 )),
                 Expanded(
@@ -144,7 +144,7 @@ class StartUpMenu extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      'Your BestScore ${scoreProvider.myBestScore}',
+                      '${scoreProvider.myName} BestScore ${scoreProvider.myBestScore}',
                       textAlign: TextAlign.center,
                     ),
                   ),

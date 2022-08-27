@@ -166,6 +166,9 @@ class ScoreProvider with ChangeNotifier {
   int get myScore {
     return _myScore;
   }
+  String get myName {
+    return _myName;
+  }
 
   int get myBestScore {
     return _myBestScore;
