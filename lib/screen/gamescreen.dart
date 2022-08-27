@@ -7,30 +7,15 @@ import 'package:snake_snake/providers/score_providers.dart';
 import '../components/game.dart';
 import '../interface/interfaces.dart';
 
-class GameScreen extends StatelessWidget{
-  // FocusNode gameFocus = FocusNode();
+class GameScreen extends StatefulWidget{
+  @override
+  State<GameScreen> createState() => _GameScreenState();
+}
 
-  AppBar appBar = AppBar(
-    title: const Text('Snakes'),
-    centerTitle: true,
-    leading: IconButton(
-      icon: const Icon(Icons.menu),
-      onPressed: () {},
-    ),
-    elevation: 0,
-    actions: [
-      Consumer<ScoreProvider>(
-        builder: (context, scoreProvider, _) => FittedBox(
-            fit: BoxFit.contain,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-              child: Text('Score : ${scoreProvider.myScore}'),
-            )),
-      ),
-    ],
-    // leading:
-  );
+class _GameScreenState extends State<GameScreen> {
+  FocusNode gameFocus = FocusNode();
+
+
 
     Rect _getScreenSize(BuildContext context, double appBarHeight) {
     final mediaQuery = MediaQuery.of(context);
@@ -46,35 +31,45 @@ class GameScreen extends StatelessWidget{
     );
   }
 
-
-
-
       // final tileSize = screen.width / 30;
-
-      // final board = Board(
-      //   screen.width ~/ tileSize,
-      //   screen.height ~/ tileSize,
-      // );
-
-      // final _gameRenderer = GameRenderer(
-      //   tileSize: tileSize,
-      //   screen: screen,
-      //   board: board,
-      // );
-
-
-
-    //   overlayBuilderMap: { // todo Overlay en fonction du jeux
-    //     'menu': (_, game) => Menu(game),
-    //     'gameover': (_, game) => GameOver(game),
-    //   },
-    //   initialActiveOverlays: const ['menu'],
-    // );
-
-
-
   @override
   Widget build(BuildContext context) {
+
+      FocusNode buttonFocus = FocusNode(onKey: (node, event) {
+    node.unfocus();
+    gameFocus.requestFocus();
+
+    return KeyEventResult.ignored;
+  },);
+
+      AppBar appBar = AppBar(
+        backgroundColor: Colors.transparent,
+    title: const Text('Snakes'),
+    centerTitle: true,
+    leading: IconButton(
+      autofocus: false,
+      focusNode: buttonFocus,
+      // highlightColor: Colors.transparent,
+      // splashColor: Colors.transparent,
+      // hoverColor: Colors.transparent,
+focusColor: Colors.transparent,
+      icon: const Icon(Icons.menu),
+      onPressed: () => null
+    ),
+    elevation: 0,
+    actions: [
+      Consumer<ScoreProvider>(
+        builder: (context, scoreProvider, _) => FittedBox(
+            fit: BoxFit.contain,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: Text('Score : ${scoreProvider.myScore}'),
+            )),
+      ),
+    ],
+    // leading:
+  );
         final screen = _getScreenSize(
         context,
         appBar.preferredSize.height,
@@ -105,6 +100,7 @@ class GameScreen extends StatelessWidget{
 
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: appBar,
       body: mySnakeGame,
     );
