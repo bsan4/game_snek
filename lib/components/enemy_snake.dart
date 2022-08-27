@@ -20,6 +20,8 @@ import 'game.dart';
 /// Luckily for you, its speed is lowered by the weight of despair
 class EnemySnake extends ExampleSnake {
   double circleRadius = 10.0;
+  double summedDt = 0.0;
+
   EnemySnake(double localRadius, Vector2 initialPosition) : super(localRadius, initialPosition) {
     circleRadius = localRadius;
     velocity = 1.5;
@@ -57,6 +59,7 @@ class EnemySnake extends ExampleSnake {
       SnakeDirection.Up,
       SnakeDirection.Down
     ];
+    
     bool isNewDirectionColliding = false;
     ComponentSet objectsOnMap = gameRef.children;
     List<PositionComponent> collisionableOjects = [];
@@ -71,7 +74,7 @@ class EnemySnake extends ExampleSnake {
               collisionableOjects.add(collisionObject);
             }
           } else {
-            if ( (bodyParts.length == 0) || (!identical(object, bodyParts[0])) ) {
+            if(!identical(object, this)){
               collisionableOjects.add(object);
             }
           }
@@ -81,19 +84,60 @@ class EnemySnake extends ExampleSnake {
     for (PositionComponent object in collisionableOjects) {
       int directionId = 0;
       for (SnakeDirection testedDirection in directions) {
-        Vector2 nextPosition = getNextPosition(testedDirection);
-        double collisionDistance = nextPosition.distanceTo(object.position);
-        if (collisionDistance <
-            circleRadius + max(object.width, object.height)) {
-          // Update the minimum collision distance in that direction
-          if (collisionDistance < distanceToObstacle[directionId]) {
-            distanceToObstacle[directionId] = collisionDistance;
-          }
-          // Remember that it will be necessary to switch directions
-          if (testedDirection == newDirection) {
-            isNewDirectionColliding = true;
+        Vector2 projectedDirection;
+        double hallwayXmin = -double.infinity;
+        double hallwayXmax = double.infinity;
+        double hallwayYmin = -double.infinity;
+        double hallwayYmax = double.infinity;
+        switch (testedDirection){
+          case SnakeDirection.Left:
+            projectedDirection = Vector2(-1,0);
+            hallwayXmax = position.x;
+            hallwayYmin = position.y-circleRadius;
+            hallwayYmax = position.y+circleRadius;
+            break;
+          case SnakeDirection.Right:
+            projectedDirection = Vector2(1,0);
+            hallwayXmin = position.x;
+            hallwayYmin = position.y-circleRadius;
+            hallwayYmax = position.y+circleRadius;
+            break;
+          case SnakeDirection.Up:
+            projectedDirection = Vector2(0,-1);
+            hallwayXmin = position.x - circleRadius;
+            hallwayXmax = position.x + circleRadius;
+            hallwayYmax = position.y;
+            break;
+          case SnakeDirection.Down:
+            projectedDirection = Vector2(0,1);
+            hallwayXmin = position.x - circleRadius;
+            hallwayXmax = position.x + circleRadius;
+            hallwayYmin = position.y;
+            break;
+        }
+        
+        if ( (object.x >= hallwayXmin) && (object.x <= hallwayXmax) 
+          && (object.y >= hallwayYmin) && (object.y <= hallwayYmax)  )
+        {
+          Vector2 nextPosition = getNextPosition(testedDirection);
+          Vector2 positionDifference = Vector2(nextPosition.x, nextPosition.y);
+          positionDifference.sub(object.position);
+          positionDifference.multiply(projectedDirection);
+          double collisionDistance = positionDifference.distanceTo(Vector2(0,0));
+
+          if ( (0 < collisionDistance) && (collisionDistance <
+              circleRadius + max(object.width, object.height)) ) {
+            // Update the minimum collision distance in that direction
+            if (collisionDistance < distanceToObstacle[directionId]) {
+              distanceToObstacle[directionId] = collisionDistance;
+            }
+            // Remember that it will be necessary to switch directions
+            if (testedDirection == newDirection) {
+              isNewDirectionColliding = true;
+            }
           }
         }
+        
         directionId++;
       }
     }
