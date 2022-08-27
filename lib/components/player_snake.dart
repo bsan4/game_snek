@@ -30,9 +30,6 @@ class PlayerSnake extends ExampleSnake {
   @override
   Future<void>? onLoad() async {
     isEvil = false;
-    
-// final headSprite = await Sprite.load('snakes/13.png');
-// sprite = headSprite;
     return super.onLoad();
   }
 

@@ -24,7 +24,7 @@ class EnemySnake extends ExampleSnake {
 
   EnemySnake(double localRadius, Vector2 initialPosition) : super(localRadius, initialPosition) {
     circleRadius = localRadius;
-    velocity = 1.5;
+    velocity = 1.75;
     setDirection(SnakeDirection.Right);
   }
 
@@ -175,10 +175,14 @@ class EnemySnake extends ExampleSnake {
     if( other is FoodManager){
     }
     else if (collisionableObjects.contains(other)){
-      gameRef.onEnemySuicide();
+      if(!identical(other, bodyParts[0])){
+        gameRef.onEnemySuicide();
+        gameRef.addScore(10);
+      }
     }
-    else if (gameRef.enemySnake.collisionableObjects.contains(other)){
+    else if (gameRef.mySnake.collisionableObjects.contains(other)){
       gameRef.onEnemyAssasination();
+      gameRef.addScore(15);
     }
     super.onCollision(intersectionPoints, other);
   }
