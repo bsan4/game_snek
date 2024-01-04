@@ -27,7 +27,8 @@ enum GameState {
 
 class MySnakeGame extends FlameGame
     with HasCollisionDetection, PanDetector, KeyboardEvents {
-  MySnakeGame({
+  MySnakeGame(
+    this.screen, {
     Key? key,
   })  : gameState = GameState.pause,
         super();
@@ -37,13 +38,16 @@ class MySnakeGame extends FlameGame
   late FoodManager foodManager;
   late GameState gameState;
   late TextAnimationManager textAnimationManager;
+  Rect screen;
+  double timeBufurePan = 0;
+  static const TIMEFORPAN = 10.0;
 
-  Vector2 mySnakeInitialPosition = Vector2(200,250);
-  Vector2 enemySnakeInitialPosition = Vector2(250,300);
+  Vector2 mySnakeInitialPosition = Vector2(200, 250);
+  Vector2 enemySnakeInitialPosition = Vector2(250, 300);
 
   //ici on va gerer la logique du jeux (score etc)
 
-  double _gestureThreshold = 5;
+  double _gestureThreshold = 10;
 
   Rect _getScreenSize(BuildContext context, double appBarHeight) {
     final mediaQuery = MediaQuery.of(context);
@@ -61,19 +65,22 @@ class MySnakeGame extends FlameGame
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    if (info.delta.game.x < -_gestureThreshold) {
-      mySnake.setDirection(SnakeDirection.Left);
+    if (timeBufurePan <= 0) {
+      if (info.delta.game.x < -_gestureThreshold) {
+        mySnake.setDirection(SnakeDirection.Left);
+      }
+      if (info.delta.game.x > _gestureThreshold) {
+        mySnake.setDirection(SnakeDirection.Right);
+      }
+      if (info.delta.game.y < -_gestureThreshold) {
+        mySnake.setDirection(SnakeDirection.Up);
+      }
+      if (info.delta.game.y > _gestureThreshold) {
+        mySnake.setDirection(SnakeDirection.Down);
+      }
+      super.onPanUpdate(info);
+      timeBufurePan = TIMEFORPAN;
     }
-    if (info.delta.game.x > _gestureThreshold) {
-      mySnake.setDirection(SnakeDirection.Right);
-    }
-    if (info.delta.game.y < -_gestureThreshold) {
-      mySnake.setDirection(SnakeDirection.Up);
-    }
-    if (info.delta.game.y > _gestureThreshold) {
-      mySnake.setDirection(SnakeDirection.Down);
-    }
-    super.onPanUpdate(info);
   }
 
   @override
@@ -114,8 +121,6 @@ class MySnakeGame extends FlameGame
     textAnimationManager = TextAnimationManager(Vector2(50, 50));
     add(textAnimationManager);
 
-    // TODO: implement onLoad
-
     //ici on va ajouter les composentes de notre jeux
     // add(BackgroundLayer(sizeEcran))
     // add(PlayerSnake());
@@ -129,6 +134,10 @@ class MySnakeGame extends FlameGame
     var foodSprite = await Sprite.load('Ghostpixxells_pixelfood/97_sushi.png');
     foodManager = FoodManager(30, foodSprite);
     add(foodManager);
+    mySnakeInitialPosition =
+        Vector2(screen.centerLeft.dx, screen.centerLeft.dy);
+    enemySnakeInitialPosition =
+        Vector2(screen.topCenter.dx, screen.topCenter.dy);
 
     mySnake = PlayerSnake(15, mySnakeInitialPosition.clone());
     enemySnake = EnemySnake(10, enemySnakeInitialPosition.clone());
@@ -149,6 +158,10 @@ class MySnakeGame extends FlameGame
 
     paused = true;
     gameState = GameState.gameOver;
+    mySnake.position = Vector2.all(-40);
+    enemySnake.position = Vector2.all(-80);
+    foodManager.position = Vector2.all(-120);
+
     buildContext?.read<ScoreProvider>().setReasonForDeath(reasonForDeath);
     buildContext?.read<ScoreProvider>().updateBestScore();
     overlays.add(GameOver.overlayName);
@@ -170,6 +183,7 @@ class MySnakeGame extends FlameGame
     gameState = GameState.running;
     overlays.remove(StartUpMenu.overlayName);
   }
+
   void reStartGame() {
     //to do reset all component and score
     overlays.remove(GameOver.overlayName);
@@ -178,12 +192,29 @@ class MySnakeGame extends FlameGame
     paused = false;
   }
 
+  void onMainMenu() {
+    //to do reset all component and score
+    overlays.remove(GameOver.overlayName);
+    overlays.add(StartUpMenu.overlayName);
+    resetGame();
+    gameState = GameState.pause;
+    paused = true;
+  }
+
   void addScore(int pointsToAdd) {
     // scoreProvider.addScore(pointsToAdd);
     if (buildContext != null) {
       buildContext?.read<ScoreProvider>().addScore(pointsToAdd);
     }
+  }
 
+  @override
+  void update(double dt) {
+    // TODO: implement update
+    if (timeBufurePan >= 0) {
+      timeBufurePan--;
+    }
+    super.update(dt);
   }
 
   void onFoodEatenByPlayer() {
@@ -202,7 +233,11 @@ class MySnakeGame extends FlameGame
     enemySnake.position = enemySnakeInitialPosition.clone();
   }
 
-  void onPlayerSuicide() {gameOver("Suicide");}
+  void onPlayerSuicide() {
+    gameOver("Suicide");
+  }
 
-  void onPlayerAssasination() {gameOver("Assassinated by the enemy");}
+  void onPlayerAssasination() {
+    gameOver("Assassinated by the enemy");
+  }
 }

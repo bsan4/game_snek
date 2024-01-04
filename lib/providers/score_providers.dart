@@ -75,11 +75,15 @@ class ScoreProvider with ChangeNotifier {
     return true;
   }
 
-  Future<bool> retrieveOnlineBestScores() async {
+  Future<List<ScoreOnline>> retrieveOnlineBestScores() async {
     // final pref = await SharedPreferences.getInstance();
     // var url = Uri.https('https://snek-a01db-default-rtdb.europe-west1.firebasedatabase.app/', 'score');
     // var response = await http.get(url);
+    threeBestScores = [];
+
     var client = http.Client();
+    late Map decoded;
+    List<ScoreOnline> finalScores = [];
     try {
       // var url = Uri.https(
       //     'snek-a01db-default-rtdb.europe-west1.firebasedatabase.app',
@@ -91,7 +95,7 @@ class ScoreProvider with ChangeNotifier {
         url,
       );
 
-      var decoded = jsonDecode(response.body) as Map;
+     decoded = jsonDecode(response.body) as Map;
 
       ///find the 3 best
 
@@ -102,6 +106,10 @@ class ScoreProvider with ChangeNotifier {
       for (int i = 0; i < 3; i++) {
         var scoreOnlineToAdd = whatisthis.removeLast();
         if (scoreOnlineToAdd != null) {
+          
+          finalScores.add(ScoreOnline(
+              score: int.parse(scoreOnlineToAdd.value['bestscore']),
+              nameScorer: scoreOnlineToAdd.key));
           threeBestScores.add(ScoreOnline(
               score: int.parse(scoreOnlineToAdd.value['bestscore']),
               nameScorer: scoreOnlineToAdd.key));
@@ -123,7 +131,8 @@ class ScoreProvider with ChangeNotifier {
     }
 
     // _myBestScore = pref.getInt('bestScore') ?? 0;
-    return true;
+    notifyListeners();
+    return finalScores;
   }
 
   bool updateScore(int newScore) {
@@ -148,8 +157,8 @@ class ScoreProvider with ChangeNotifier {
     } on Exception catch (e) {
       // TODO
     }
-
-    return true;
+    await retrieveOnlineBestScores();
+    return true ;
   }
 
   bool addScore(int pointToAdd) {
@@ -168,6 +177,12 @@ class ScoreProvider with ChangeNotifier {
   }
   String get myName {
     return _myName;
+  }
+  Future<void> setMyName(String newName) async {
+     _myName = newName;
+      final pref = await SharedPreferences.getInstance();
+     pref.setString('name', _myName);
+     notifyListeners();
   }
 
   int get myBestScore {

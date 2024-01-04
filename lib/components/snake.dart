@@ -197,6 +197,8 @@ class ExampleSnake extends SpriteComponent
   }
 
   void reset(){
+    // direction = SnakeDirection.Right;
+    setDirection(SnakeDirection.Right);
     while (bodyParts.length > 0){
       parent?.remove(bodyParts[0]);
       bodyParts.removeAt(0);

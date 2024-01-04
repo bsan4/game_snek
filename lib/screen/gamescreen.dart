@@ -8,6 +8,8 @@ import '../components/game.dart';
 import '../interface/interfaces.dart';
 
 class GameScreen extends StatefulWidget {
+
+  static const routeName = '/game_screen' ;
   @override
   State<GameScreen> createState() => _GameScreenState();
 }
@@ -109,7 +111,7 @@ class _GameScreenState extends State<GameScreen> {
             LayoutBuilder(builder: (context, contraints) {
           return CorrectBackground(backgroundRect: screen);
         }),
-        game: MySnakeGame(),
+        game: MySnakeGame(screen),
         // focusNode: gameFocus,
         loadingBuilder: (context) => Center(
           child: Text(
